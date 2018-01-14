@@ -1,0 +1,68 @@
+// ==========================================================================
+// Global Imports
+// ==========================================================================
+
+@import 'base/index';
+@import 'layout/index';
+@import 'components/index';
+@import 'shop/index';
+@import 'user/index';
+
+* {box-sizing:border-box}
+
+html {
+    background-color: rgb(247, 247, 247);
+}
+
+header {
+    font-family: $font-stack-secondary;
+}
+
+body {
+    font-family: $font-stack-secondary;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1 {
+    font-family: $font-stack-primary;
+    color: rgb(46, 40, 40);
+    font-size: 50px;
+    line-height: 45px;
+    animation: slide-in-vertical 0.5s cubic-bezier(0.230, 1.000, 0.320, 1.000) both 0.25s;
+}
+
+h3 {
+    animation: slide-in-vertical 0.5s cubic-bezier(0.230, 1.000, 0.320, 1.000) both 0.4s;
+}
+
+button {
+    transition: transform 100ms ease-in-out;
+    &:hover {
+        transform: scale(1.01);
+    }
+}
+
+hr {
+    animation: slide-in-left 0.5s cubic-bezier(0.230, 1.000, 0.320, 1.000) both 1s;
+}
+
+.clearfix:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.alert {
+    animation: slide-in-vertical 0.5s cubic-bezier(0.230, 1.000, 0.320, 1.000) both 0.27s;
+}
+
+@media screen and (max-width: 500px) {
+    h1 {
+        font-size: 28px;
+    }
+}

@@ -1,0 +1,82 @@
+.annotation-content {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 20;
+    background: url(/img/mask.svg) top center repeat-x;
+    animation: slide-in-vertical-shake 0.5s cubic-bezier(0.230, 1.000, 0.320, 1.000) both 1s;   
+    .annotation {
+        width: 90%;
+        max-width: 800px;
+        margin: 25px auto;
+        padding: 10px 22px;
+        font-size: 16px;
+        font-weight: bold;
+        line-height: 22px;
+        background: #FFF;
+        border-radius: 15px;
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.15);
+        text-align: center;
+        position: relative;
+        display: block;
+        .close {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            img {
+                height: 20px; 
+                width: 20px;
+                border-radius: 100%;
+                opacity: 1;
+                &:hover {
+                    opacity: 0.5;
+                }
+                &:active {
+                    opacity: 1;
+                }
+            }
+        }
+        p {
+            font-size: 12px;
+            font-weight: 400;
+            color: #6A7C94;
+            margin: 0;
+        }
+        a {
+            color: #666EE8;
+        }
+        .github {
+            background-image: url(/img/arrow-purple.svg);
+        }
+        .support-text {
+            font-size: 10px; 
+            text-align: center; 
+            margin: 0;
+        }
+    }
+    .info {
+        background: #FFF url(/img/info.svg) 10px 10px no-repeat;
+        animation: slide-in-vertical 0.5s cubic-bezier(0.230, 1.000, 0.320, 1.000) both 1s;
+        p {
+            padding-left: 20px;
+        }
+        strong {
+            display: block;
+        }
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .annotation {
+        flex-flow: row wrap;
+        margin: 10px auto;
+        p {
+            order: 1;
+            margin-top: 5px;
+        }
+        &.info {
+            display: none;
+        }
+    }
+}

@@ -17,6 +17,7 @@
 
   * The following is not required to start up, but obiviously you should have these for production:
     * Have a [Stripe](https://stripe.com) account with a [publishable API test key](https://dashboard.stripe.com/account/apikeys) and [secret API test key](https://dashboard.stripe.com/account/apikeys).  To register for a free Stripe account, go to https://dashboard.stripe.com/register.  Stripe handles online transactions.
+    * Have a [PayPal](https://developer.paypal.com/developer/applications/create) account with a client ID and secret ID.
     * Have a [SendGrid](https://sendgrid.com/) account with a secret API key and a receiving email address.  This will be use for receiving email messages from customers and sellers on the website.
     * Have a [Google Analytic](https://analytics.google.com/analytics) account with a new tracking ID created for the site.  This will be use for analysis on the website.
 

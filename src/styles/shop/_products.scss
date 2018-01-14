@@ -1,0 +1,85 @@
+.thumbnail {
+    padding: 15px;
+    border: 1px solid rgb(179, 216, 183);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 2.5px;
+    width: 46%;
+    float: left;
+    margin: 20px 2%;
+    animation: slide-in-left 0.5s cubic-bezier(0.230, 1.000, 0.320, 1.000) both 0.7s;
+    .caption {
+        width: 60%;
+        float: left;
+    }
+    .image-container {
+        float: right;
+    }
+    img {
+        max-height: 150px;
+        max-width: 150px;
+        margin: 0 auto;
+        &:hover {
+            border: 1px solid $primary-color;
+        }
+    }
+    a {
+        text-decoration: none;
+    }
+    .description {
+        color: #7f7f7f;
+    }
+    h3 {
+        color: $secondary-color;
+        margin-top: 0;
+        font-family: $font-stack-primary;
+        font-size: 25px;
+        transition: transform 10ms cubic-bezier(0.62, 0.46, 0.4, 1.11);
+        &:hover {
+            transform: scale(1.01);
+            color: $primary-color;
+        }
+    }
+    p {
+        font-family: $font-stack-primary;
+        margin: 5px;
+        font-weight: none;
+    }
+    .seller-text {
+        color: gray;
+    }
+    .price-text {
+        font-weight: bold;
+        font-size: 20px;
+        height: 25px;
+        line-height: 25px;
+    }
+    .caption {
+        font-family: $font-stack-secondary;
+    }
+}
+
+@media (max-width: 1050px) {
+    .thumbnail {
+        img {
+            max-width: 125px;
+        }
+    }
+}
+
+@media (max-width: 900px) {
+    .thumbnail {
+        img {
+            max-width: 100px;
+        }
+    }
+}
+
+@media (max-width: 800px) {
+    .thumbnail {
+        width: 100%;
+        img {
+            max-width: 125px;
+        }
+    }
+}
+

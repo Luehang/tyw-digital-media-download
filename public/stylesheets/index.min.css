@@ -893,231 +893,27 @@ template {
 
 nav {
   position: fixed;
+  height: 50px;
   width: 100%;
-  z-index: 10;
+  z-index: 100;
   padding: 0;
   margin: 0;
-  border-radius: 50%;
-  animation: slide-in-horizontal-reverse 0.5s cubic-bezier(0.23, 1, 0.32, 1) both 0.15s; }
-  nav .nav-title {
-    font-size: 20px; }
-  nav .menu-list {
-    font-size: 18px;
-    color: #f3f3f3; }
-  nav ul {
-    list-style: none;
-    margin: 0;
-    padding: 0; }
-  nav a {
+  animation: slide-in-horizontal-reverse 0.5s cubic-bezier(0.23, 1, 0.32, 1) both 0.15s;
+  background-color: rgba(56, 58, 66, 0.8); }
+  nav .nav-container {
+    max-width: 1100px;
+    width: 90%;
+    margin: 0 auto; }
+  nav h3 {
     font-family: "Oxygen", "Arial Rounded MT Bold", "Segoe UI";
+    font-size: 25px;
+    line-height: 50px; }
+  nav a {
     text-decoration: none;
-    font-size: 16px;
     color: #f3f3f3; }
     nav a:hover {
       cursor: pointer;
       color: #1abc9c; }
-    nav a:active {
-      background-color: #343538; }
-  nav .login-text {
-    font-family: "Oxygen", "Arial Rounded MT Bold", "Segoe UI";
-    color: #f3f3f3; }
-  nav .menu-list:hover {
-    color: #1abc9c; }
-  nav .login-text:hover {
-    color: #1abc9c; }
-
-.selected {
-  color: #1abc9c; }
-
-@media (min-width: 851px) {
-  nav {
-    text-align: left; }
-    nav .main-list {
-      width: 49%; }
-      nav .main-list .nav-title {
-        display: block;
-        width: 40%; }
-      nav .main-list .menu-list {
-        width: 60%; }
-        nav .main-list .menu-list li {
-          width: 148px; }
-    nav .secondary-list {
-      width: 49%;
-      text-align: right; }
-      nav .secondary-list .social-list li {
-        width: 148px; }
-    nav h3 {
-      visibility: hidden;
-      position: absolute; }
-    nav .main-list-container {
-      background-color: rgba(40, 42, 49, 0.9);
-      border-bottom: 3px solid #1abc9c; }
-    nav .nav-container {
-      max-width: 1100px;
-      width: 90%;
-      margin: 0 auto; }
-    nav ul {
-      text-align: left;
-      display: inline-block; }
-    nav ul.social-list {
-      float: right; }
-    nav li {
-      float: left;
-      height: 45px;
-      line-height: 45px;
-      cursor: pointer; }
-      nav li .nav-main-text:hover {
-        font-size: 18px; }
-    nav ul.menu-list ul li {
-      background-color: rgba(58, 59, 63, 0.8);
-      text-align: center; }
-      nav ul.menu-list ul li:last-child {
-        border-radius: 0 0 5px 5px;
-        -webkit-border-radius: 0 0 5px 5px;
-        -moz-border-radius: 0 0 5px 5px; }
-      nav ul.menu-list ul li:active {
-        background-color: rgba(52, 53, 56, 0.9); }
-    nav ul.social-list .login-text {
-      text-align: right; }
-    nav ul.social-list ul li {
-      background-color: rgba(58, 59, 63, 0.8);
-      text-align: center; }
-      nav ul.social-list ul li:last-child {
-        border-radius: 0 0 5px 5px;
-        -webkit-border-radius: 0 0 5px 5px;
-        -moz-border-radius: 0 0 5px 5px; }
-      nav ul.social-list ul li:active {
-        background-color: rgba(52, 53, 56, 0.9); }
-    nav ul.menu-list li ul li {
-      display: none; }
-    nav ul.social-list li ul li {
-      display: none; }
-    nav li:hover > ul.dropdown-menu li {
-      display: block; }
-    nav li:hover > ul.dropdown-menu.menu-1 {
-      perspective: 1000px; }
-      nav li:hover > ul.dropdown-menu.menu-1 li {
-        opacity: 0;
-        animation-name: menu1;
-        animation-duration: 200ms;
-        animation-timing-function: ease-in-out;
-        animation-fill-mode: forwards; }
-  @keyframes menu1 {
-    0% {
-      opacity: 0;
-      transform: rotateY(-90deg) translateY(30px); }
-    100% {
-      opacity: 1;
-      transform: rotateY(0deg) translateY(0px); } }
-  @-moz-keyframes menu1 {
-    0% {
-      opacity: 0;
-      transform: rotateY(-90deg) translateY(30px); }
-    100% {
-      opacity: 1;
-      transform: rotateY(0deg) translateY(0px); } }
-  @-webkit-keyframes menu1 {
-    0% {
-      opacity: 0;
-      transform: rotateY(-90deg) translateY(30px); }
-    100% {
-      opacity: 1;
-      transform: rotateY(0deg) translateY(0px); } }
-  @-ms-keyframes menu1 {
-    nav li:hover > ul.dropdown-menu.menu-1 li 0% {
-      opacity: 0;
-      transform: rotateY(-90deg) translateY(30px); }
-    nav li:hover > ul.dropdown-menu.menu-1 li 100% {
-      opacity: 1;
-      transform: rotateY(0deg) translateY(0px); } }
-  @-o-keyframes menu1 {
-    0% {
-      opacity: 0;
-      transform: rotateY(-90deg) translateY(30px); }
-    100% {
-      opacity: 1;
-      transform: rotateY(0deg) translateY(0px); } } }
-
-@media (max-width: 850px) {
-  .list-mobile-container {
-    max-width: 1100px;
-    width: 90%;
-    margin: 0 auto;
-    position: relative;
-    padding-top: 5px;
-    height: 50px; }
-  nav .main-list .nav-title {
-    display: none; }
-  nav .menu-list {
-    background-color: rgba(58, 59, 63, 0.8);
-    padding: 10px 5%;
-    cursor: pointer; }
-  nav .list-icon-container {
-    background-color: rgba(40, 42, 49, 0.9); }
-  nav .nav-container {
-    border-bottom: 3px solid #1abc9c; }
-  nav a {
-    display: block;
-    padding: 10px 5%; }
-  nav .nav-title a {
-    padding: 0; }
-  nav .social-list {
-    border-bottom: 2px solid #1abc9c;
-    background-color: rgba(58, 59, 63, 0.8); }
-    nav .social-list .login-text {
-      display: block;
-      padding: 10px 5%;
-      cursor: pointer; }
-    nav .social-list li:nth-child(-n+1) {
-      border-top: 1px solid #1abc9c; }
-    nav .social-list a {
-      padding-left: 40px; }
-  nav .dropdown-menu-disable {
-    display: none; }
-  nav .dropdown-menu-enable {
-    display: block; }
-  nav h3 {
-    margin: 0;
-    line-height: 45px;
-    display: inline-block;
-    float: left;
-    font-family: "Oxygen", "Arial Rounded MT Bold", "Segoe UI";
-    color: #f3f3f3;
-    font-weight: normal; }
-  .icon-list {
-    border-radius: 0;
-    -webkit-border-radius: 0;
-    -moz-border-radius: 0;
-    height: 45px;
-    width: 55px;
-    padding: 0;
-    border: none;
-    float: right; }
-  .icon-list:hover {
-    cursor: pointer; }
-  .list-bar {
-    border: 1.5px solid #f3f3f3;
-    margin: 8px;
-    border-radius: 1px;
-    -webkit-border-radius: 1px;
-    -moz-border-radius: 1px;
-    transition: transform 100ms; }
-  .icon-list:hover .list-bar:nth-child(1) {
-    transform: translate(0, -3px);
-    -ms-transform: translate(0, -3px);
-    -webkit-transform: translate(0, -3px); }
-  .icon-list:hover .list-bar:nth-child(3) {
-    transform: translate(0, 3px);
-    -ms-transform: translate(0, 3px);
-    -webkit-transform: translate(0, 3px); }
-  .icon-list:active .list-bar:nth-child(1) {
-    transform: translate(0, 10px);
-    -ms-transform: translate(0, 10px);
-    -webkit-transform: translate(0, 10px); }
-  .icon-list:active .list-bar:nth-child(3) {
-    transform: translate(0, -10px);
-    -ms-transform: translate(0, -10px);
-    -webkit-transform: translate(0, -10px); } }
 
 footer {
   background-color: #25272e;
@@ -1167,36 +963,6 @@ footer {
   footer .fa:hover {
     animation: shake 0.5s;
     animation-iteration-count: infinite; }
-
-.main-alert {
-  background: rgba(0, 0, 0, 0.3);
-  position: fixed;
-  height: 0px;
-  width: 100%;
-  transition: height 400ms cubic-bezier(0.25, 0.39, 0.39, 2.01);
-  height: 25px;
-  line-height: 20px;
-  z-index: 20;
-  margin-top: 51px;
-  padding: 10px;
-  text-align: center;
-  color: #f3f3f3;
-  font-family: 'Cabin', 'Trebuchet MS', 'Tahoma';
-  font-size: 14px;
-  display: none; }
-  .main-alert.is-open {
-    display: block; }
-  .main-alert div {
-    margin-top: -9px; }
-
-.success {
-  background: #5aca5a; }
-
-.warning {
-  background: #c9c631; }
-
-.danger {
-  background: #c43434; }
 
 .annotation-content {
   position: fixed;
@@ -2133,6 +1899,33 @@ button:disabled {
     font-size: 15px;
     line-height: 24px;
     color: #6A7C94; }
+
+/* Make circles that indicate the steps of the form: */
+.step {
+  animation: slide-in-vertical 0.5s cubic-bezier(0.23, 1, 0.32, 1) both 0.5s;
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbbbbb;
+  border: none;
+  border-radius: 50%;
+  display: inline-block;
+  opacity: 0.5; }
+
+/* Mark the active step: */
+.step.active {
+  opacity: 1;
+  background-color: #1abc9c; }
+
+/* Mark the steps that are finished and valid: */
+.step.finish {
+  background-color: #4CAF50; }
+
+.tab {
+  display: none; }
+
+#paypal-button {
+  animation: slide-in-vertical 0.5s cubic-bezier(0.23, 1, 0.32, 1) both 0.5s; }
 
 #sign-up-form .g-recaptcha {
   animation: slide-in-vertical 0.5s cubic-bezier(0.23, 1, 0.32, 1) both 0.5s; }

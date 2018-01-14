@@ -1,52 +1,9 @@
 <nav>
-    <div class="list-icon-container">
-        <div class="list-mobile-container">
-            <h3 class="nav-title">
-                <a href="/">
-                    {{ appName }}
-                </a>   
-            </h3>
-            <div class="icon-list">
-                <div class="list-bar"></div>
-                <div class="list-bar"></div>
-                <div class="list-bar"></div>
-            </div>
-        </div>
-    </div>
-    <div class="main-list-container dropdown-menu menu-1">
-        <div class="nav-container">
-            <div id="dropdown-menu-1" class="dropdown-menu-disable">
-                <ul class="main-list">
-                    <li class="nav-title">
-                        <a href="/">
-                            {{ appName }}
-                        </a>
-                    </li>
-                    {{!-- <ul class="menu-list">
-                        <li class="menu-text"> Menu <span class="caret"></span>
-                            <ul class="dropdown-menu menu-1">
-                                <li class="dropdown-menu-disable"><a href="/products">Category</a></li>
-                            </ul>
-                        </li>
-                    </ul> --}}
-                </ul>
-                <ul class="secondary-list">
-                    <ul class="social-list">
-                        {{#if login }}
-                            <li class="login-text"><i class="fa fa-user" aria-hidden="true"></i> User <span class="caret"></span>
-                                <ul class="dropdown-menu menu-1">
-                                    <li class="dropdown-menu-disable"><a href="/user/profile">User Profile</a></li>
-                                    {{#if seller}}
-                                        <li class="dropdown-menu-disable"><a href="/user/products">User Products</a></li>
-                                    {{/if}}
-                                    <li class="dropdown-menu-disable"><a href="/user/orderhistory">Order History</a></li>
-                                    <li class="dropdown-menu-disable"><a href="/user/logout">Logout</a></li>
-                                </ul>
-                            </li>
-                        {{/if }}
-                    </ul>
-                </ul>
-            </div>
-        </div>
+    <div class="nav-container">
+        <h3>
+            <a href="/">
+                {{ appName }}
+            </a>   
+        </h3>
     </div>
 </nav> <!-- end nav -->

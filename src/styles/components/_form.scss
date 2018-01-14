@@ -1,0 +1,339 @@
+.form {
+    margin: 15px auto;
+    width: 100%;
+}
+
+.account {
+    min-height: 400px;
+}
+
+.form .checkmark {
+    width: 100px;
+    height: 100px;
+    background: #FFF url(/img/checkmark-green.svg) center center no-repeat;
+    background-size: 65px 45px;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.15);
+    border-radius: 50%;
+    animation: slide-in-vertical 0.5s cubic-bezier(0.230, 1.000, 0.320, 1.000) both 0.5s;
+}
+
+.form section {
+    padding: 30px 10px;
+}
+
+.form h2 {
+    margin: 30px 0 15px;
+    font-size: 19px;
+    font-weight: 500;
+    color: #32315E;
+    text-align: center;
+    animation: slide-in-vertical 0.5s cubic-bezier(0.230, 1.000, 0.320, 1.000) both 0.55s;
+}
+
+.form p {
+    margin: 0 0 30px;
+    font-size: 17px;
+    color: #8798AB;
+    text-align: center;
+    animation: slide-in-vertical 0.5s cubic-bezier(0.230, 1.000, 0.320, 1.000) both 0.6s;
+}
+
+.form p.error {
+    color: #FC7455;
+}
+
+.form h4 {
+    margin: 15px 0;
+    color: #8798AB;
+    font-size: 16px;
+    font-weight: 500;
+    animation: slide-in-vertical 0.5s cubic-bezier(0.230, 1.000, 0.320, 1.000) both 0.5s;
+}
+
+fieldset {
+    animation: slide-in-vertical 0.5s cubic-bezier(0.230, 1.000, 0.320, 1.000) both 0.55s;
+}
+
+.form input[type="submit"],
+.form button,
+.form a.button {
+    text-align: center;
+    animation: slide-in-vertical 0.5s cubic-bezier(0.230, 1.000, 0.320, 1.000) both 0.6s;
+}
+
+.form label {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    line-height: 20px;
+    font-size: 13px;
+    color: #8798AB;
+    padding: 0 30px;
+    animation: slide-in-vertical 0.5s cubic-bezier(0.230, 1.000, 0.320, 1.000) both 0.65s;
+}
+
+.options label {
+    padding: 0 40px;
+}
+
+.options strong {
+    display: inline-block;
+    margin-left: 5px;
+}
+
+.options span {
+    display: block;
+    margin-left: 20px;
+}
+
+form {
+    position: relative;
+    width: 100%;
+    font-size: 15px;
+}
+
+form aside {
+    margin: -30px auto 0;
+    line-height: 1.3em;
+    font-size: 13px;
+    text-align: center;
+    color: #8798AB;
+    animation: slide-in-vertical 0.5s cubic-bezier(0.230, 1.000, 0.320, 1.000) both 0.65s;
+}
+
+fieldset {
+    position: relative;
+    min-width: 0;
+    margin-bottom: 40px;
+    border-style: none;
+    background-color: #FFF;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
+}
+
+fieldset .row {
+    display: flex;
+    align-items: flex-end;
+    position: relative;
+    width: 100%;
+    padding: 12px 20px 13px;
+}
+  
+fieldset .row:not(.hidden) ~ .row {
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+fieldset .row::before {
+    content: attr(label);
+    width: 130px;
+    padding-right: 20px;
+    color: #8798AB;
+    font-weight: 500;
+    text-align: right;
+}
+
+fieldset .row.select::after {
+    content: "";
+    position: absolute;
+    width: 9px;
+    height: 5px;
+    right: 20px;
+    top: 50%;
+    margin-top: -2px;
+    background-image: url(/images/dropdown.svg);
+    pointer-events: none;
+}
+
+fieldset .row input {
+    flex: 1;
+    border-style: none;
+    font-size: 15px;
+    outline: none;
+    color: #313B3F;
+}
+
+fieldset .row select {
+    flex: 1;
+    padding-right: 25px;
+    border-style: none;
+    outline: none;
+    -webkit-appearance: none;
+    font-size: 15px;
+    outline: none;
+    color: #313B3F;
+    cursor: pointer;
+    background: transparent;
+}
+
+fieldset .row select:focus {
+    color: #00B67C;
+}
+
+fieldset .row.date span {
+    padding-right: 10px;
+    color: #AAB7C5;
+    font-weight: 500;
+}
+
+fieldset .row.date input {
+    flex: 0;
+    min-width: 35px;
+}
+
+fieldset .row.date input:last-child {
+    flex: 1;
+}
+
+input[type="submit"],
+button,
+a.button {
+    display: block;
+    width: 100%;
+    margin: 20px 0;
+    padding: 12px 20px;
+    border-style: none;
+    border-radius: 5px;
+    background-color: $primary-color;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.15);
+    font-size: 17px;
+    font-weight: 500;
+    color: #FFF;
+    cursor: pointer;
+    outline: none;
+    -webkit-appearance: none;
+}
+
+#content a.button::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 13px;
+    margin: 5px 10px;
+    background: url(/images/arrow-white.svg) right center no-repeat;
+}
+
+input[type="submit"].secondary {
+    color: #313B3F;
+    background: #FFF;
+}
+
+input[type="submit"].secondary:active {
+    background: #F5F6F7;
+}
+
+button:hover,
+a.button:hover {
+    text-decoration: none;
+}
+
+input[type="submit"]:active,
+button:active,
+a.button:active {
+    background-color: #01966F;
+}
+
+header button,
+header a.button,
+header input[type="submit"] {
+    margin: 15px 0 0;
+    padding: 0 16px;
+    height: 36px;
+    line-height: 36px;
+    background-color: #FFF;
+    color: $primary-color;
+    text-align: center;
+}
+
+header button:active,
+header a.button:active,
+header input[type="submit"]:active {
+    background-color: #FFF;
+    color: #01966F;
+}
+
+form a.button {
+    text-align: center;
+}
+
+button:disabled {
+    background-color: rgb(168, 164, 164);
+}
+
+.danger-button {
+    background-color: rgb(224, 65, 65);
+}
+
+/* upload file css */
+.input-file-container {
+    position: relative;
+    width: 225px;
+    margin: 0 auto 1em;
+} 
+.js .input-file-trigger {
+    display: block;
+    padding: 12px 20px;
+    background: #39D2B4;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 1em;
+    transition: all .4s;
+    cursor: pointer;
+}
+.js .input-file {
+    position: absolute;
+    top: 0; left: 0;
+    width: 225px;
+    opacity: 0;
+    padding: 14px 0;
+    cursor: pointer;
+}
+.js .input-file:hover + .input-file-trigger,
+.js .input-file:focus + .input-file-trigger,
+.js .input-file-trigger:hover,
+.js .input-file-trigger:focus {
+    background: #13B57D;
+    color: #8798AB;
+}
+
+.file-return {
+    margin: 0;
+}
+.file-return:not(:empty) {
+    margin: 1em 0;
+}
+.js .file-return {
+    font-style: italic;
+    font-size: .9em;
+    font-weight: bold;
+}
+.js .file-return:not(:empty):before {
+    font-style: normal;
+    font-weight: normal;
+}
+
+@media screen and (max-width: 500px) {
+    form {
+        margin-top: 0;
+    }
+    
+    fieldset .row {
+        padding: 12px 5px 13px;
+    }
+    
+    .form {
+        width: 100%;
+        margin: 15px 0;
+        label {
+            padding: 0;
+        }
+        .checkmark {
+            width: 66px;
+            height: 66px;
+            background-size: 44px 30px;
+        }
+    }
+
+    .options span {
+        display: none;
+    }
+}

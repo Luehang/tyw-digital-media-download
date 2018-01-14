@@ -1,0 +1,116 @@
+$senape:rgb(71, 190, 115);
+$giallo:rgb(254,203,108);
+$cubicBounce:cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+.product{
+    width:100%;
+    background:white;
+    margin: 0 auto 100px;
+    animation: slide-in-left 0.5s cubic-bezier(0.230, 1.000, 0.320, 1.000) both 0.5s;
+    &.action{
+        animation: bounce 1s $cubicBounce infinite;
+    }
+    .header{
+        height:40px;
+        position:relative;
+        padding:20px;
+        .back{
+            position:relative;
+            width:0px;
+            height:0px;
+            border-top: 30px solid $senape;
+            border-bottom: 30px solid transparent;
+            border-left: 30px solid $senape;
+            border-right: 30px solid transparent;
+            &:before{
+                content:"←";
+                position:absolute;
+                color:rgba(255,255,255,0.9);
+                font-size:1.3rem;
+                font-weight:bold;
+                top:-22px;
+                left:-22px;
+            }
+        }
+    }
+    .main{
+        padding:0 30px;
+        .quantity{
+            margin-top:40px;
+            color: #333;
+        }
+        h1{
+            font-size: 1.7rem;
+            -webkit-margin-before: 0;
+            -webkit-margin-after: 0;
+            margin: 0;
+            color:#232e3a;
+        }
+        h2{
+            color:#999999;
+            -webkit-margin-before: 0;
+            -webkit-margin-after: 0;
+            margin: 0 0;
+            text-transform:uppercase;
+        }
+        h3{
+            color:#232e3a;
+            margin:0;
+        }
+        img{
+            max-width: 300px;
+            max-height: 300px;
+            width: 100%;
+        }
+        .left,
+        .right{
+            width:50%;
+            padding: 0 calc(5% - 1px);
+        }
+        .right{
+            color:#999;
+            font-size:.78rem;
+            line-height: 1.5;
+        }
+    }
+    .footer{
+        margin: 10px 50px 0;
+        border-top: 1px solid #ccc;
+        .left{
+            p:before{
+                content:"Price";
+                text-transform:uppercase;
+                font-size:.7rem;
+                color:black;
+                position:absolute;
+                top:-12px;
+                width:200%;
+            }
+        }
+        p{
+            color:$senape;
+            position:relative;
+            font-size:1.5rem;
+            margin: 15px 0;
+        }
+    }
+}
+  
+.left{
+    float:left;
+}
+
+.right{
+    float:right;
+}
+
+@media (max-width: 850px) {
+    .product {
+        .main {
+            .left,
+            .right {
+                width: 100%;
+            }
+        }
+    }
+}

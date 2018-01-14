@@ -2,7 +2,5 @@
 /.env
 /node_modules
 /package-lock.json
-/src
 /maps
-/public/uploads
 

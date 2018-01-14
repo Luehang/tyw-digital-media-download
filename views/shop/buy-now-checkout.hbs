@@ -8,41 +8,53 @@
         </div>
         <hr>
         <form id="checkout-form" class="form" action="/checkout/{{ product._id }}" method="POST">
-            <fieldset style="margin: 0">
-                <h3>Personal Information</h3>
-                <div label="* Name" class="row">
-                    <input id="name" type="text" name="name" autocapitalize="words" maxlength="20" autocomplete="given-name" required/>
+            <div style="text-align:center; margin: 20px 0;">
+                <span class="step"></span>
+                <span class="step"></span>
+            </div>
+            <div class="tab">
+                <fieldset style="margin: 0">
+                    <h3>Personal Information</h3>
+                    <div label="* Name" class="row">
+                        <input id="name" type="text" name="name" autocapitalize="words" maxlength="20" autocomplete="given-name" required/>
+                    </div>
+                    <div label="* Email" class="row">
+                        <input id="email" type="email" name="email" placeholder="jane@example.com" autocomplete="email" maxlength="30" required/>
+                    </div>
+                </fieldset>
+                <br />
+            </div>
+            <div class="tab">
+                <h2 style="font-weight: bold">Payment Method</h2>
+                <div id="paypal-button"></div>
+                <br />
+                <fieldset>
+                    <h3>Credit/Debit Card</h3>
+                    <div label="* Full Name" class="row">
+                        <input type="text" id="card-name" autocomplete="cc-name">
+                    </div>
+                    <div label="* Card Number" id="card-number-row" class="row">
+                        <input type="text" id="card-number" autocomplete="cc-number">
+                    </div>
+                    <div label="* Expiration Month" id="card-expiry-month-row" class="row">
+                        <input type="text" id="card-expiry-month" placeholder="MM" autocomplete="cc-exp-month">
+                    </div>
+                    <div label="* Expiration Year" id="card-expiry-year-row" class="row">
+                        <input type="text" id="card-expiry-year" placeholder="YYYY" autocomplete="cc-exp-year">
+                    </div>
+                    <div label="* CVC" id="card-cvc-row" class="row">
+                        <input type="text" id="card-cvc" autocomplete="cc-csc">
+                    </div>
+                </fieldset>
+                <button type="submit" id="submit-button" class="submit-button">Buy Now</button>
+            </div>
+            <hr>
+            <div>
+                <div style="float:right;">
+                    <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+                    <button type="button" id="nextBtn" onclick="nextPrev(1)">Next</button>
                 </div>
-                <div label="* Email" class="row">
-                    <input id="email" type="email" name="email" placeholder="jane@example.com" autocomplete="email" maxlength="30" required/>
-                </div>
-            </fieldset>
-            <br />
-            <div id="paypal-button"></div>
-            <br />
-            <fieldset>
-                <h3>Card Information</h3>
-                <div label="* Full Name" class="row">
-                    <input type="text" id="card-name" autocomplete="cc-name">
-                </div>
-                <div label="* Card Number" id="card-number-row" class="row">
-                    <input type="text" id="card-number" autocomplete="cc-number">
-                </div>
-                <div label="* Expiration Month" id="card-expiry-month-row" class="row">
-                    <input type="text" id="card-expiry-month" placeholder="MM" autocomplete="cc-exp-month">
-                </div>
-                <div label="* Expiration Year" id="card-expiry-year-row" class="row">
-                    <input type="text" id="card-expiry-year" placeholder="YYYY" autocomplete="cc-exp-year">
-                </div>
-                <div label="* CVC" id="card-cvc-row" class="row">
-                    <input type="text" id="card-cvc" autocomplete="cc-csc">
-                </div>
-            </fieldset>
-            <button type="submit" id="submit-button" class="submit-button">Buy Now</button>
-        </form>
-        <hr>
-        <form id="back-form" class="form" action="/products/{{ product._id }}" method="GET">
-            <button type="submit" class="danger-button">Back</button>
+            </div>
         </form>
     </div>
 </div>
