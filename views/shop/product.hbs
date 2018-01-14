@@ -1,0 +1,68 @@
+<div class="primary-container">
+    <div class="product clearfix">
+        <div class="header">
+            <a href="/"><div class="back"></div></a>
+        </div>
+        <div class="main clearfix">
+            <div class="left">
+                <h1>{{ product.title }}</h1>
+                <h2>Download</h2>
+                <img src="{{ product.image_path }}" alt="...">
+            </div>
+            <div class="right">
+                <p>{{ product.description }}</p>
+                <p>In stock.</p>
+                <input id="product-id" type="hidden" value="{{ product._id }}"/>
+                <input id="product-rating" type="hidden" value="{{ rating }}" />
+                <div id="product-rating-div"></div>
+                {{#if reviewCount }}
+                    <p>{{ ratingAvg }}</p>
+                {{/if}}
+                <br />
+                <br />
+                {{#if reviewCount }}
+                    <a href="#customer-reviews" style="text-decoration: underline; font-size: 12px;">
+                        {{ reviewCount }} customer reviews &#9662
+                    </a>
+                {{/if }}
+            </div>
+        </div>
+        <div class="footer cleafix">
+            <div class="left">
+                <p id="price" class="full-price">${{ product.price }}</p>
+            </div>
+            <div class="right">
+                {{#if isDownload }}
+                    <a href="#" style="text-decoration: none;" download><p>Download</p></a>
+                {{else }}
+                    <a href="/checkout/{{ product._id }}" style="text-decoration: none;"><p>Buy Now</p></a>
+                {{/if }}
+            </div>
+        </div>
+    </div>
+
+    <h3 class="customer-title">Customer Reviews</h3>
+    <div class='comments'>
+        <div class='loader'></div>
+        <div class='inner'>
+            <form class="stars-container clearfix">
+                <input class="click star star-5" id="star-5" type="radio" name="rating" value="5"/>
+                    <label class="star star-5" for="star-5"></label>
+                <input class="click star star-4" id="star-4" type="radio" name="rating" value="4"/>
+                    <label class="star star-4" for="star-4"></label>
+                <input class="click star star-3" id="star-3" type="radio" name="rating" value="3"/>
+                    <label class="star star-3" for="star-3"></label>
+                <input class="click star star-2" id="star-2" type="radio" name="rating" value="2"/>
+                    <label class="star star-2" for="star-2"></label>
+                <input class="click star star-1" id="star-1" type="radio" name="rating" value="1"/>
+                    <label class="star star-1" for="star-1"></label>
+            </form>
+            <div id="customer-reviews" class='add-new'>
+                <input class='input your-name' placeholder='Type your name here...' type='text'>
+                <textarea class='input your-msg' maxlength='300' placeholder='Type your message here...'></textarea>
+                <button class='send-msg'>Send message</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="/javascripts/product.min.js"></script>

@@ -1,0 +1,41 @@
+<div class="form-container">
+    <h1>{{ title }}</h1>
+    <form id="add-product-form" class="form" 
+        {{#if update }}
+            action="/user/account/update-product/{{ product._id }}?_method=PUT"
+        {{else }}
+            action="/user/account/add-product" 
+        {{/if}}
+            method="POST" enctype="multipart/form-data">
+        <fieldset>
+            <h3>Product</h3>
+            <hr>
+            <div label="* Title" class="row">
+                <input type="text" id="add-product-title" value="{{product.title}}" name="title" autocapitalize="words" maxlength="20"/>
+            </div>
+            <div label="Description" class="row">
+                <input type="text" value="{{product.description}}" name="description" autocapitalize="sentences" maxlength="100"/>
+            </div>
+            <div label="* Price" class="row">
+                <input type="text" id="add-product-price" value="{{product.price}}" placeholder="9.99"  name="price" maxlength="10">
+            </div>
+            <div label="Available" class="row">
+                <input type="text" id="add-product-available" value="{{product.available}}" placeholder="1" name="available" maxlength="3">
+            </div>
+            <div label="Selected File:" class="row">
+                <input id="file-return" type="text" value="{{product.image_path}}" disabled/>
+            </div>
+            <div class="input-file-container">  
+                <input class="input-file" id="my-file" type="file" name="imageFile"/>
+                <label tabindex="0" for="my-file" class="input-file-trigger">Select a File</label>
+                <p style="margin: 0 0 10px; font-size: 10px;">max 100 MB</p>
+            </div>
+        </fieldset>
+        {{#if update }}
+            <a class="button">Update</a>
+        {{else }}
+            <a class="button">Add</a>
+        {{/if}}
+    </form>
+</div>
+

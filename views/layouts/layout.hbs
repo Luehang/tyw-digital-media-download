@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{title}}</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" href="/stylesheets/index.min.css"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <link href="https://fonts.googleapis.com/css?family=Oxygen:400,300,700" rel="stylesheet">
+    </head>
+
+    {{!-- Global site tag (gtag.js) - Google Analytics --}}
+    <input id="googleAnalytic" type="hidden" value="{{googleTrackingID}}" />
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{googleTrackingID}}"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', document.getElementById('googleAnalytic').value);
+    </script>
+
+    <header>
+        {{> header }}
+        <div class="main-alert"></div>
+    </header>
+
+    <div class="annotation-content" id="front-annotation" style="display: none">
+        <div class="annotation">
+            <a class="close"><img src="/img/close.svg"/></a>
+            <div id="alert" class="alert alert-danger">
+                
+            </div>
+            <p class="support-text"><a href="#contact">Contact Customer Service</a></p>
+        </div>
+    </div>
+    
+    <body>
+        
+        {{!-- <div class="primary-container clearfix"> --}}
+        <div class="clearfix">
+            
+            {{{body}}}
+
+            {{#if pagination }}
+                <hr>
+                <div class="pagination-container">
+                    {{#if hasPerviousPagesUrl }}
+                        <div class="prev button">
+                            <a href="{{hasPerviousPagesUrl}}">
+                                <img class="pagination-left-icon" src="/img/left-double-arrow.svg"/>
+                            </a>
+                        </div>
+                    {{else}}
+                        <div class="prev button">
+                            <a>
+                                <img class="pagination-left-icon" src="/img/left-double-arrow-disabled.svg"/>
+                            </a>
+                        </div>
+                    {{/if }}
+                    <div class="button">
+                        <a>{{pageNumber}}</a>
+                    </div>
+                    {{#if hasNextPagesUrl }}
+                        <div class="next button">
+                            <a href="{{hasNextPagesUrl}}">
+                                <img class="pagination-right-icon" style="color: gray;" src="/img/right-double-arrow.svg"/>
+                            </a>
+                        </div>
+                    {{else }}
+                        <div class="next button">
+                            <a>
+                                <img class="pagination-right-icon" src="/img/right-double-arrow-disabled.svg"/>
+                            </a>
+                        </div>
+                    {{/if }}
+                </div>
+            {{/if}}
+        </div>
+
+    </body>
+
+    {{!-- Error and success message alerts. --}}
+    {{#if hasSuccess}}
+        <div class="annotation-content">
+            <div class="annotation">
+                <a class="close"><img src="/img/close.svg"/></a>
+                <div id="success" class="alert alert-success">
+                    <p style="color: green;">{{ successMsg }}</p>
+                </div>
+                <p class="support-text"><a href="#contact">Contact Customer Service</a></p>
+            </div>
+        </div>
+    {{/if}}
+
+    {{#if hasErrors}}
+        <div class="annotation-content">
+            <div class="annotation">
+                <a class="close"><img src="/img/close.svg"/></a>
+                <div class="alert alert-danger">
+                    {{#each messages }}
+                        <p style="color: red;">* {{this}}</p>
+                    {{/each}}
+                </div>
+                <p class="support-text"><a href="#contact">Contact Customer Service</a></p>
+            </div>
+        </div>
+    {{/if}}
+
+        <footer>
+            <div class="footer-container">
+                {{> footer }}
+            </div>
+            <script type="text/javascript" src="/javascripts/index.min.js"></script>
+        </footer>
+        
+    </div>
+</html>
+

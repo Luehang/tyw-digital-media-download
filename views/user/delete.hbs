@@ -1,0 +1,36 @@
+<div class="form-container">
+    <h1>{{title}}</h1>
+    {{#if stripe }}
+        <form class="form" action="/user/account/delete?type=stripe&_method=DELETE" method="POST">
+            <p>{{description}}</p>
+            <fieldset>
+                <div label="Email" class="row">
+                    <input type="email" name="email" placeholder="jane@example.com" autofocus="autofocus" autocomplete="email"/>
+                </div>
+                <div label="Password" class="row">
+                    <input type="password" name="password" placeholder="••••••••"/>
+                </div>
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+                <input type="hidden" name="type" value="stripe">
+            </fieldset>
+            <button type="submit" class="danger-button">UNLINK</button>
+            <button type="submit" formaction="/user/profile" formmethod="GET">CANCEL</button>
+        </form>
+    {{else }}
+        <form class="form" action="/user/account/delete?type=user&_method=DELETE" method="POST">
+            <p>{{description}}</p>
+            <fieldset>
+                <div label="Email" class="row">
+                    <input type="email" name="email" placeholder="jane@example.com" autofocus="autofocus" autocomplete="email"/>
+                </div>
+                <div label="Password" class="row">
+                    <input type="password" name="password" placeholder="••••••••"/>
+                </div>
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+                <input type="hidden" name="type" value="user">
+            </fieldset>
+            <button type="submit" class="danger-button">DELETE</button>
+            <button type="submit" formaction="/user/profile" formmethod="GET">CANCEL</button>
+        </form>
+    {{/if }}
+</div>

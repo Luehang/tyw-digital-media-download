@@ -1,0 +1,34 @@
+<div class="form-container">
+    <h1>{{ title }}</h1>
+    <form id="delete-product-form" class="form" action="/user/account/delete-product/{{product._id}}?_method=DELETE" method="POST">
+        <h3>Are you absolutely sure?</h3>
+        <p>This action cannot be undone. </br>This will permanently delete the "{{product.title}}" product.</p>
+        <p>Please type in the name of the product to confirm.</p>
+        <fieldset>
+            <div label="* Title" class="row">
+                <input type="text" id="delete-product-title" name="title" autocapitalize="words" maxlength="20"/>
+            </div>
+        </fieldset>
+        <input type="hidden" id="delete-product-title-origin" value="{{product.title}}"/>
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+        <a class="button" style="background: rgb(224, 65, 65);">CONFIRM</a>
+        <button type="submit" formaction="/user/products" formmethod="GET">CANCEL</button>
+    </form>
+</div>
+
+<script>
+    var deleteProductForm = document.getElementById('delete-product-form');
+    var deleteProductFormSubmitButton = document.querySelector('#delete-product-form .button');
+    var deleteProductTitle = document.getElementById('delete-product-title');
+    var deleteProductTitleOrigin = document.getElementById('delete-product-title-origin');
+
+    // submit button on click
+    deleteProductFormSubmitButton.addEventListener('click', function() {
+        if (deleteProductTitle.value === deleteProductTitleOrigin.value) {
+            deleteProductForm.submit();
+        } else {
+            document.getElementById('alert').innerHTML = `<p style="color: red;">* The product names do not match.</p>`
+            document.getElementById('front-annotation').style.display = "block";
+        }
+    });
+</script>

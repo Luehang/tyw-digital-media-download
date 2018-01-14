@@ -1,0 +1,48 @@
+<style>
+    .switch-page-container {
+        display: block;
+    }
+</style>
+
+<form id="search-form" class="form" action="/search-product" method="GET">
+    <fieldset>
+        <div label="Search" class="row">
+            <input type="text" name="search" placeholder="Search products" autofocus="autofocus"/>
+        </div>
+    </fieldset>
+    <button type="submit">Search</button>
+</form>
+
+<h1>{{ this.title }}</h1>
+
+{{#each products }}
+    <div class="row clearfix">
+        {{#each this }}
+            <div class="thumbnail  clearfix">
+                <div class="caption pull-right">
+                    <a href="/products/{{ this._id }}"><h3>{{ this.title }}</h3></a>
+                    {{#if this._seller.company_name }}
+                        <p class="seller-text">by {{ this._seller.company_name }}</p>
+                    {{else}}
+                        <p class="seller-text">by {{ this._seller.email }}</p>
+                    {{/if}}
+                    <p class="price-text full-price">${{ this.price }}</p>
+                    <p>{{ this.available }} available</p>
+                </div>
+                <div class="image-container">
+                    <a class="clearfix" href="/products/{{ this._id }}">
+                        <img src="{{ this.image_path }}" alt="...">
+                    </a>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+{{/each}}
+
+{{#unless products }}
+    <h3 style="color: #6A7C94">No products found for that search.</h3>
+{{/unless }}
+
+
+
+

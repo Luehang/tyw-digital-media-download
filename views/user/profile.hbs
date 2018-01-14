@@ -1,0 +1,64 @@
+<div class="form-container">
+    <h1>Profile</h1>
+    <form class="form">
+        <h3>Basic Information</h3>
+        <hr>
+        <fieldset>
+            <div label="Email" class="row">
+                <input type="text" name="email" value="{{userProfile.user.email}}" disabled/>
+            </div>
+            <div label="Business Type" class="row">
+                <input type="text" value="{{userProfile.business_type}}" disabled/>
+            </div>
+            {{#if userProfile.company_name }}
+                <div label="Business Name" class="row">
+                    <input type="text" value="{{userProfile.company_name}}" disabled/>
+                </div>
+            {{else }}
+                <div label="Full Name" class="row">
+                    <input type="text" value="{{userProfile.first_name}} {{userProfile.last_name}}" disabled/>
+                </div>
+            {{/if }}
+            <div label="Phone Number" class="row">
+                <input type="text" value="{{userProfile.phone_number}}" disabled/>
+            </div>
+            <div label="Business Number" class="row">
+                <input type="text" value="{{userProfile.business_number}}" disabled/>
+            </div>
+        </fieldset>
+        <h3>Addresses</h3>
+        <hr>
+        <fieldset>
+            <div label="Home Address" class="row">
+                <input type="text" value="{{userProfile.home_address.address}}" disabled/>
+            </div>
+            <div label="Home City" class="row">
+                <input type="text" value="{{userProfile.home_address.city}}, {{userProfile.home_address.state}}" disabled/>
+            </div>
+            <div label="Billing Address" class="row">
+                <input type="text" value="{{userProfile.billing_address.address}}" disabled/>
+            </div>
+            <div label="Billing City" class="row">
+                <input type="text" value="{{userProfile.billing_address.city}}, {{userProfile.billing_address.state}}" disabled/>
+            </div>
+        </fieldset>
+    </form>
+    <form class="form" action="/user/update-profile" method="GET">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <button type="submit">Update Profile</button>
+        <button type="submit" formaction="/user/account/change-password" formmethod="GET">Change Password</button>
+    </form>
+    <hr>
+    {{#if userProfile.user.stripe_account_id }}
+        <form class="form" action="/user/account/delete" method="GET">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+            <input type="hidden" name="type" value="stripe"/>
+            <button type="submit" class="danger-button">Unlink Stripe</button>
+        </form>
+    {{/if }}
+    <form class="form" action="/user/account/delete" method="GET">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+        <input type="hidden" name="type" value="user"/>
+        <button type="submit" class="danger-button">Delete Account</button>
+    </form>
+</div>

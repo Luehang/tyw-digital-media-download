@@ -1,0 +1,15 @@
+<div class="form-container">
+    <h1 style="margin: 0 0 .5em; padding-top: 65px;">Sign In</h1>
+    <form id="sign-in-form" class="form" action="/user/signin" method="POST">
+        <fieldset>
+            <div label="Email" class="row">
+                <input type="email" name="email" placeholder="jane@example.com" autofocus="autofocus" autocomplete="email" maxlength="30"/>
+            </div>
+            <div label="Password" class="row">
+                <input type="password" name="password" placeholder="••••••••" maxlength="20"/>
+            </div>
+        </fieldset>
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <button type="submit">Sign In</button>
+    </form>
+</div>
