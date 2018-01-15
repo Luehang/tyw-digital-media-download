@@ -17,7 +17,7 @@
                 <div id="product-rating-div"></div>
                 {{#if reviewCount }}
                     <p>({{ ratingAvg }})</p>
-                {{/if}}
+                {{/if }}
                 <br />
                 <br />
                 {{#if reviewCount }}
@@ -33,7 +33,8 @@
             </div>
             <div class="right">
                 {{#if isDownload }}
-                    <a href="{{ product.image_path }}" style="text-decoration: none;" download><p>Download</p></a>
+                    <input id="download-id" type="hidden" value="{{ downloadID }}" />
+                    <a id="download-button" href="{{ product.download_path }}" style="text-decoration: none;" download><p>Download</p></a>
                 {{else }}
                     <a href="/checkout/{{ product._id }}" style="text-decoration: none;"><p>Buy Now</p></a>
                 {{/if }}
@@ -65,4 +66,5 @@
         </div>
     </div>
 </div>
+
 <script type="text/javascript" src="/javascripts/product.min.js"></script>

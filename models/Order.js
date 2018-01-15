@@ -8,6 +8,7 @@ const orderSchema = new Schema({
     name: {type: String, required: true},
     email: {type: String, required: true},
     _product: {type: Schema.Types.ObjectId, ref: 'Product'},
+    download: {type: Number, default: 0},
     amount: {type: Number, required: true},
     stripe_charge_id: {type: String},
     purchase_date: {type: Date, default: Date.now},

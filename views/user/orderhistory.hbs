@@ -6,8 +6,9 @@
                 <div class="caption pull-right">
                     <a href="/products/{{ this._product._id }}"><h3>{{ this._product.title }}</h3></a>
                     <p>Purchase Date : {{ this.purchase_date }}</p>
-                    <p class="seller-text">Name: {{ this.name }}</p>
-                    <p class="seller-text">Email: {{ this.email }}</p>
+                    <p class="inner-text">Name: {{ this.name }}</p>
+                    <p class="inner-text">Email: {{ this.email }}</p>
+                    <p class="inner-text">Total Downloads: {{ this.download }}</p>
                     <p class="price-text full-price">${{ this.amount }}</p>
                 </div>
                 <div class="image-container">

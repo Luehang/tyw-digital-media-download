@@ -8,13 +8,14 @@ const fs                    = require('fs');
 
 // models
 const Product               = require('../models/Product');
-const File                  = require('../models/File');
+const Download              = require('../models/Download');
 const Review                = require('../models/Review');
 const Order                 = require('../models/Order');
 
 // controllers
 const functionController    = require('./functionController');
 const nearestHundredths     = functionController.nearestHundredths;
+const isCurrency            = functionController.isCurrency;
 
 const productController = {};
 
@@ -71,6 +72,7 @@ productController.getIndividualProduct = async (req, res, next) => {
                 ratingAvg: ratingAverage,
                 reviewCount: reviewCount,
                 isDownload: isDownload,
+                downloadID: downloadID,
                 successMsg: successMsg,
                 hasSuccess: successMsg.length > 0,
                 messages: messages, 
@@ -88,9 +90,13 @@ productController.getIndividualProduct = async (req, res, next) => {
  * Show add product form.
  */
 productController.getAddProductForm = (req, res) => {
+    // store any messages in variables if any
+    const messages = req.flash('error');
     res.render('user/add-product', {
         title: 'Add Products',
-        update: false
+        update: false,
+        messages: messages, 
+        hasErrors: messages.length > 0
     });
 }
 
@@ -110,8 +116,11 @@ const storage = multer.diskStorage({
 // Init Upload
 const upload = multer({
     storage: storage,
-    limits: {fileSize: 100000000}
-}).single('imageFile');
+    limits: {fileSize: 500000000}
+}).fields([
+    { name: 'imageFile', maxCount: 1 },
+    { name: 'downloadFile', maxCount: 1 }
+]);
 
 /**
  * POST /user/account/add-product
@@ -120,17 +129,23 @@ const upload = multer({
  */
 productController.postProductUploadMiddleware = (req, res, next) => {
     upload(req, res, (err) => {
+        // if no title
+        if (req.body.title === "") {
+            req.flash('error', 'Need to add a product title.');
+            return res.redirect('/user/account/add-product');
+        }
+        // if not currency
+        if (!isCurrency(req.body.price)) {
+            req.flash('error', 'Product price needs to be formatted in USD currency. Ex. 99.90');
+            return res.redirect('/user/account/add-product');
+        }
         if (err) {
+            console.log(err);
             req.session.error = err;
             return next();
         } else {
-            // if no image upload
-            if(req.file == undefined){
-                req.session.image = false;
-                next();
-            // else if image upload
-            } else {
-                req.session.image = true;
+            // if no errors
+            if(req.files.imageFile !== undefined && req.files.downloadFile !== undefined) {
                 next();
             }
         }
@@ -144,18 +159,25 @@ productController.postProductUploadMiddleware = (req, res, next) => {
  * throw any errors request from middleware. If validation passes,
  * then save information and redirect to user product page.
  */
-productController.postProductUpload = (req, res) => {
-    const { title, description, price, available } = req.body;
+productController.postProductUpload = async (req, res) => {
+    const { title, description, price } = req.body;
     // create product model
     const product = new Product({
-        _seller: req.user._id,
-        title: title,
-        // if no image than defaults at
-        // image_path: "/img/no-image.jpg",
-        description: description,
-        price: price,
-        available: available
+        title,
+        description,
+        price
     });
+    // title: {type: String, required: true},
+    // image_path: {type: String, default: "/img/no-image.jpg"},
+    // download_path: {type: String},
+    // description: {type: String, default: 'No description available.'},
+    // price: {type: Number, required: true},
+    // sold: {type: Number, default: 0},
+    // download: {type: Number, default: 0},
+    // rating: {type: Number, default: null},
+    // category: {type: String, default: null},
+    // main: {type: Boolean, default: false},
+    // featured: {type: Boolean, default: false}
     // if any image upload errors
     if (req.session.error) {
         req.flash('error', req.session.error);
@@ -168,43 +190,49 @@ productController.postProductUpload = (req, res) => {
             hasErrors: errorMessages.length > 0,
             product: product
         });
-    } else {
-        const file = req.file;
+    }
+
+    try {
+        const imageFile = req.files.imageFile[0];
+        const downloadFile = req.files.downloadFile[0];
         // if image upload
-        if(req.session.image){
-            req.session.image = null;
-            // save image path to product model
-            product.image_path = `/uploads/${file.filename}`;
-            // create image model
-            const file = new File({
-                _user: req.user._id,
-                originalname: file.originalname,
-                encoding: file.encoding,
-                mimetype: file.mimetype,
-                destination: file.destination,
-                filename: file.filename,
-                path: `/uploads/${file.filename}`,
-                size: file.size
-            });
-            // save product to db
-            product.save((err, product) => {
-                // save image to db
-                file.save((err, image) => {
-                    req.flash('success', 'Product added successfully.');
-                    // redirect to account product page
-                    return res.status(201).redirect('/user/products');
-                }); 
-            });
-        // else if no image upload
-        } else {
-            req.session.image = null;
-            // save product to db
-            product.save((err, product) => {
-                req.flash('success', 'Product added successfully.');
-                // redirect to account product page
-                return res.status(201).redirect('/user/products');
-            });
-        }
+        req.session.upload = null;
+        // save image and download path to product model
+        product.image_path = `/uploads/${imageFile.filename}`;
+        product.download_path = `/uploads/${downloadFile.filename}`;
+        // create download model
+        const image = new Download({
+            _user: req.user._id,
+            originalname: imageFile.originalname,
+            encoding: imageFile.encoding,
+            mimetype: imageFile.mimetype,
+            destination: imageFile.destination,
+            filename: imageFile.filename,
+            path: `/uploads/${imageFile.filename}`,
+            size: imageFile.size
+        });
+        const download = new Download({
+            _user: req.user._id,
+            originalname: downloadFile.originalname,
+            encoding: downloadFile.encoding,
+            mimetype: downloadFile.mimetype,
+            destination: downloadFile.destination,
+            filename: downloadFile.filename,
+            path: `/uploads/${downloadFile.filename}`,
+            size: downloadFile.size
+        });
+        // save product to db
+        await product.save();
+        // save image to db
+        await image.save();
+        // save download to db
+        await download.save();
+        req.flash('success', 'Product added successfully.');
+        // redirect to account product page
+        return res.status(201).redirect('/user/products');
+    } catch (err) {
+        console.log(err);
+        next();
     }
 }
 
@@ -236,7 +264,7 @@ productController.getUpdateProductForm = (req, res) => {
  * upload new image if any.
  */
 productController.putUpdateProductUpload = (req, res) => {
-    const { title, description, price, available } = req.body;
+    const { title, description, price } = req.body;
     const productID = req.params.id;
     // if any image upload errors
     if (req.session.error) {
@@ -245,8 +273,7 @@ productController.putUpdateProductUpload = (req, res) => {
             _seller: req.user._id,
             title: title,
             description: description,
-            price: price,
-            available: available
+            price: price
         });
         // store session error
         req.flash('error', req.session.error);
@@ -261,20 +288,20 @@ productController.putUpdateProductUpload = (req, res) => {
         });
     // else if no image upload errors
     } else {
-        const genFile = req.file;
+        const file = req.file;
         // if image upload
         if (req.session.image) {
             req.session.image = null;
             // create image model
-            const file = new File({
+            const image = new Download({
                 _user: req.user._id,
-                originalname: genFile.originalname,
-                encoding: genFile.encoding,
-                mimetype: genFile.mimetype,
-                destination: genFile.destination,
-                filename: genFile.filename,
-                path: `/uploads/${genFile.filename}`,
-                size: genFile.size
+                originalname: file.originalname,
+                encoding: file.encoding,
+                mimetype: file.mimetype,
+                destination: file.destination,
+                filename: file.filename,
+                path: `/uploads/${file.filename}`,
+                size: file.size
             });
             // find product data
             Product.findOne({_id: productID}, async (err, oldProduct) => {
@@ -287,11 +314,11 @@ productController.putUpdateProductUpload = (req, res) => {
                     fs.unlink(`${__dirname}/../public${oldProduct.image_path}`, function(err) {
                         if(err) return console.log(err);
                         // remove previous image data
-                        File.remove({path: oldProduct.image_path});
+                        Image.remove({path: oldProduct.image_path});
                     });  
                 });
                 // save new image data
-                await file.save();
+                await image.save();
                 // update product in db
                 await Product.update({_id: productID}, { $set: {
                     title: title,
@@ -299,7 +326,7 @@ productController.putUpdateProductUpload = (req, res) => {
                     price: price,
                     available: available,
                     // update image path
-                    image_path: `/uploads/${genFile.filename}`
+                    image_path: `/uploads/${file.filename}`
                 }}, {new: true});
             });
             // redirect to account product page
@@ -361,7 +388,7 @@ productController.deleteProductPerm = (req, res) => {
             });  
         });
         // remove image data
-        await File.remove({path: product.image_path});
+        await Image.remove({path: product.image_path});
         // remove product data in db
         await Product.remove({_id: productID});
     });

@@ -1,10 +1,10 @@
 var defaultAvatar = '/img/default-avatar.svg';
 var guestusername = '';
-var productID = $('#product-id').val();
-var url = `/api/review-message/${productID}`;
+var $productID = $('#product-id').val();
+var url = `/api/review-message/${$productID}`;
 var allComments = [];
-var productRatingDiv = $('#product-rating-div');
-var productRating = $('#product-rating').val();
+var $productRatingDiv = $('#product-rating-div');
+var $productRating = $('#product-rating').val();
 
 function starRating(rating) {
     const rates = [5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1, .5];
@@ -128,8 +128,8 @@ function stopLoader() {
 }
 
 // convert product rating and place into html
-var productRatingHTML = getRateHTML(productRating);
-productRatingDiv.html(productRatingHTML);
+var productRatingHTML = getRateHTML($productRating);
+$productRatingDiv.html(productRatingHTML);
 
 // send request for product data
 $.ajax({
@@ -167,6 +167,18 @@ $.ajax({
 setTimeout(() => {
     stopLoader();
 }, 10000);
+
+const $downloadButton = $('#download-button');
+const $downloadID = $('#download-id').val();
+// update download amount for order and product database
+$downloadButton.click(function() {
+    $.ajax({
+        type: "POST",
+        url: `/download/${$productID}?download=${$downloadID}`,
+        dataType: "json",
+        cache: true
+    }); // end ajax POST request
+});
 
 $(function() {
     // on rating input.. store rating value

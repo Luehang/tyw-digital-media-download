@@ -41,6 +41,24 @@ router.get('/products',
  */
 router.get('/products/:id', productController.getIndividualProduct);
 
+const Product = require('../models/Product');
+const Order = require('../models/Order');
+/**
+ * POST /download/:id
+ *
+ * Update download amount.
+ */
+router.route('/download/:id')
+    .post(async (req, res) => {
+        const productID = req.params.id;
+        const downloadID = req.query.download;
+        const [ product, order ] = await Promise.all([
+            Product.update({_id: productID}, {$inc: {download: 1}}),
+            Order.update({download_id: downloadID}, {$inc: {download: 1}})
+        ]);
+        res.end();
+    })
+
 /**
  * GET /search-product
  *

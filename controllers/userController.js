@@ -92,7 +92,7 @@ userController.getSignInRedirect = (req, res) => {
         req.session.oldUrl = null;
         res.redirect(oldUrl);
     } else {
-        res.redirect('/');
+        res.redirect('/user/profile');
     }
 }
 

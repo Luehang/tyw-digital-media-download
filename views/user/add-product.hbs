@@ -20,16 +20,21 @@
                 <div label="* Price" class="row">
                     <input type="text" id="add-product-price" value="{{product.price}}" placeholder="9.99"  name="price" maxlength="10">
                 </div>
-                <div label="Available" class="row">
-                    <input type="text" id="add-product-available" value="{{product.available}}" placeholder="1" name="available" maxlength="3">
-                </div>
-                <div label="Selected File:" class="row">
-                    <input id="file-return" type="text" value="{{product.image_path}}" disabled/>
+                <div label="Selected Image:" class="row">
+                    <input id="image-return" type="text" value="{{product.image_path}}" disabled/>
                 </div>
                 <div class="input-file-container">  
-                    <input class="input-file" id="my-file" type="file" name="imageFile"/>
+                    <input class="input-image" id="my-image" type="file" name="imageFile"/>
+                    <label tabindex="0" for="my-image" class="input-image-trigger">Select a Image</label>
+                    <p style="margin: 0 0 10px; font-size: 10px;">recommend 500 KB</p>
+                </div>
+                <div label="Selected File:" class="row">
+                    <input id="file-return" type="text" value="" disabled/>
+                </div>
+                <div class="input-file-container">  
+                    <input class="input-file" id="my-file" type="file" name="downloadFile"/>
                     <label tabindex="0" for="my-file" class="input-file-trigger">Select a File</label>
-                    <p style="margin: 0 0 10px; font-size: 10px;">max 100 MB</p>
+                    <p style="margin: 0 0 10px; font-size: 10px;">max 500 MB</p>
                 </div>
             </fieldset>
             {{#if update }}

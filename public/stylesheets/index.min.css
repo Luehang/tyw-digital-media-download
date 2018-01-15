@@ -1460,7 +1460,8 @@ button:disabled {
   width: 225px;
   margin: 0 auto 1em; }
 
-.js .input-file-trigger {
+.js .input-file-trigger,
+.js .input-image-trigger {
   display: block;
   padding: 12px 20px;
   background: #39D2B4;
@@ -1470,7 +1471,8 @@ button:disabled {
   transition: all .4s;
   cursor: pointer; }
 
-.js .input-file {
+.js .input-file,
+.js .input-image {
   position: absolute;
   top: 0;
   left: 0;
@@ -1482,22 +1484,30 @@ button:disabled {
 .js .input-file:hover + .input-file-trigger,
 .js .input-file:focus + .input-file-trigger,
 .js .input-file-trigger:hover,
-.js .input-file-trigger:focus {
+.js .input-file-trigger:focus,
+.js .input-image:hover + .input-image-trigger,
+.js .input-image:focus + .input-image-trigger,
+.js .input-image-trigger:hover,
+.js .input-image-trigger:focus {
   background: #13B57D;
   color: #8798AB; }
 
-.file-return {
+.file-return,
+.image-return {
   margin: 0; }
 
-.file-return:not(:empty) {
+.file-return:not(:empty),
+.image-return:not(:empty) {
   margin: 1em 0; }
 
-.js .file-return {
+.js .file-return,
+.js .image-return {
   font-style: italic;
   font-size: .9em;
   font-weight: bold; }
 
-.js .file-return:not(:empty):before {
+.js .file-return:not(:empty):before,
+.js .image-return:not(:empty):before {
   font-style: normal;
   font-weight: normal; }
 
@@ -1965,7 +1975,7 @@ button:disabled {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     margin: 5px;
     font-weight: none; }
-  .thumbnail .seller-text {
+  .thumbnail .inner-text {
     color: gray; }
   .thumbnail .price-text {
     font-weight: bold;

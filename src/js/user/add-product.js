@@ -1,19 +1,34 @@
 // upload section
 document.querySelector("html").classList.add('js');
-var fileInput  = document.querySelector( ".input-file" ),  
-    uploadButton     = document.querySelector( ".input-file-trigger" );
+var imageInput = document.querySelector( ".input-image" );
+var fileInput = document.querySelector( ".input-file" );
+var uploadImageButton = document.querySelector( ".input-image-trigger" );
+var uploadDownloadButton = document.querySelector( ".input-file-trigger" );
 // upload button hover event
-uploadButton.addEventListener( "keydown", function( event ) {  
+uploadImageButton.addEventListener( "keydown", function( event ) {  
+    if ( event.keyCode == 13 || event.keyCode == 32 ) {  
+        imageInput.focus();  
+    }  
+});
+uploadDownloadButton.addEventListener( "keydown", function( event ) {  
     if ( event.keyCode == 13 || event.keyCode == 32 ) {  
         fileInput.focus();  
     }  
 });
 // upload button on click
-uploadButton.addEventListener( "click", function( event ) {
+uploadImageButton.addEventListener( "click", function( event ) {
+    imageInput.focus();
+    return false;
+});
+uploadDownloadButton.addEventListener( "click", function( event ) {
     fileInput.focus();
     return false;
 });  
 // event change and path insert
+imageInput.addEventListener( "change", function( event ) { 
+    var image = this.value.match(/\\([^\\]+)$/)[1];
+    document.getElementById('image-return').value = image;
+});  
 fileInput.addEventListener( "change", function( event ) { 
     var file = this.value.match(/\\([^\\]+)$/)[1];
     document.getElementById('file-return').value = file;
@@ -33,7 +48,7 @@ function isCurrency(number) {
     return false;
 }
 
-// add product form submit event
+// // add product form submit event
 addProductFormSubmitButton.addEventListener('click', function(event) {
     var errorMessages = [];
     var toHTML = "";
@@ -45,10 +60,13 @@ addProductFormSubmitButton.addEventListener('click', function(event) {
     if (!isCurrency(addProductFormPrice.value)) {
         errorMessages.push('Product price needs to be formatted in USD currency. Ex. 99.90');
     }
-    // if available not integer
-    if (!(/^[0-9]+$/).test(addProductFormAvailable.value) 
-        && addProductFormAvailable.value !== "") {
-            errorMessages.push('Amount available has to be an integer.');
+    // if no image upload
+    if(imageInput.value === "") {
+        errorMessages.push('No image file was selected to upload.');
+    }
+    // if no download upload
+    if(fileInput.value === "") {
+        errorMessages.push('No download file was selected to upload.');
     }
     // if no errors then submit
     if (errorMessages.length === 0) {
