@@ -2,7 +2,7 @@ const mongoose              = require('mongoose');
 const Schema                = mongoose.Schema;
 mongoose.Promise            = require('bluebird');
 
-const imageSchema = new Schema({
+const fileSchema = new Schema({
     _user: {type: Schema.Types.ObjectId, ref: 'User'},
     originalname: {type: String, required: true},
     encoding: {type: String, required: true},
@@ -15,4 +15,4 @@ const imageSchema = new Schema({
     is_deleted: {type: Boolean, default: false}
 });
 
-module.exports = mongoose.model('Image', imageSchema);
+module.exports = mongoose.model('File', fileSchema);

@@ -16,7 +16,7 @@
                 <input id="product-rating" type="hidden" value="{{ rating }}" />
                 <div id="product-rating-div"></div>
                 {{#if reviewCount }}
-                    <p>{{ ratingAvg }}</p>
+                    <p>({{ ratingAvg }})</p>
                 {{/if}}
                 <br />
                 <br />
@@ -33,7 +33,7 @@
             </div>
             <div class="right">
                 {{#if isDownload }}
-                    <a href="#" style="text-decoration: none;" download><p>Download</p></a>
+                    <a href="{{ product.image_path }}" style="text-decoration: none;" download><p>Download</p></a>
                 {{else }}
                     <a href="/checkout/{{ product._id }}" style="text-decoration: none;"><p>Buy Now</p></a>
                 {{/if }}

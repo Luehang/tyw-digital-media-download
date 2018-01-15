@@ -1,81 +1,83 @@
-<div class="form-container">
-    <h1>{{ title }}</h1>
-    <form id="profile-form" class="form" action="/user/update-profile" method="POST">
-        <div class="business-options">
-            <label class="business-option">
-                <input type="radio" name="sell_type" value="company" id="company-type" checked="{{ isCompany }}"/><span>Company</span>
-            </label>
-            <label class="business-option">
-                <input type="radio" name="sell_type" value="individual" id="individual-type" checked="checked" checked="{{ isIndividual }}"/><span>Individual</span>
-            </label>
-        </div>
-        <fieldset>
-            <h4>Personal Information</h4>
-            <div label="* First Name" class="row">
-                <input id="first-name" type="text"  value="{{ profile.first_name }}" name="first_name" autocapitalize="words" maxlength="20" autocomplete="given-name"/>
+<div class="primary-container">
+    <div class="form-container">
+        <h1>{{ title }}</h1>
+        <form id="profile-form" class="form" action="/user/update-profile" method="POST">
+            <div class="business-options">
+                <label class="business-option">
+                    <input type="radio" name="sell_type" value="company" id="company-type" checked="{{ isCompany }}"/><span>Company</span>
+                </label>
+                <label class="business-option">
+                    <input type="radio" name="sell_type" value="individual" id="individual-type" checked="checked" checked="{{ isIndividual }}"/><span>Individual</span>
+                </label>
             </div>
-            <div label="* Last Name" class="row">
-                <input id="last-name" type="text"  value="{{ profile.last_name }}" name="last_name" autocapitalize="words" maxlength="20" autocomplete="family-name"/>
-            </div>
-            <div label="Business Number" class="row">
-                <input type="text" id="business-number" value="{{ profile.business_number }}" name="business_number" maxlength="14" placeholder="999-999-999">
-            </div>
-            <div label="* Phone Number" class="row">
-                <input type="text" id="phone-number" value="{{ profile.phone_number }}" name="phone_number" maxlength="14" placeholder="999-999-999" autocomplete="tel-national">
-            </div>
-        </fieldset>
-        <div id="billing-information">
             <fieldset>
-                <h4 class="seller-info-header">Billing Information</h4>
-                <div id="company-name-row" style="display: none">
-                    <div label="* Company Name" class="row">
-                        <input type="text" id="company-name" value="{{ profile.company_name }}" name="company_name" maxlength="20" autocomplete="off">
-                    </div>
+                <h4>Personal Information</h4>
+                <div label="* First Name" class="row">
+                    <input id="first-name" type="text"  value="{{ profile.first_name }}" name="first_name" autocapitalize="words" maxlength="20" autocomplete="given-name"/>
                 </div>
-                <div label="* Address" class="row">
-                    <input type="text" id="billing-address" value="{{ profile.billing_address.address }}" name="billing_address" maxlength="20" autocomplete="street-address">
+                <div label="* Last Name" class="row">
+                    <input id="last-name" type="text"  value="{{ profile.last_name }}" name="last_name" autocapitalize="words" maxlength="20" autocomplete="family-name"/>
                 </div>
-                <div label="* City" class="row">
-                    <input type="text" id="billing-city" value="{{ profile.billing_address.city }}" name="billing_city" maxlength="20" autocomplete="address-level2">
+                <div label="Business Number" class="row">
+                    <input type="text" id="business-number" value="{{ profile.business_number }}" name="business_number" maxlength="14" placeholder="999-999-999">
                 </div>
-                <div label="* State" class="row">
-                    <input type="text" id="billing-state" value="{{ profile.billing_address.state }}" name="billing_state" maxlength="20" autocomplete="address-level1">
-                </div>
-                <div label="* Country" class="row">
-                    <input type="text" id="billing-country" value="{{ profile.billing_address.country }}" maxlength="20" name="billing_country" autocomplete="country-name">
-                </div>
-                <div label="* Postal Code" class="row">
-                    <input type="text" id="address-zip" value="{{ profile.home_address.zip }}" maxlength="10" name="billing_zip">
+                <div label="* Phone Number" class="row">
+                    <input type="text" id="phone-number" value="{{ profile.phone_number }}" name="phone_number" maxlength="14" placeholder="999-999-999" autocomplete="tel-national">
                 </div>
             </fieldset>
-        </div>
-        <div class="billing-options">
-            <input type="checkbox" id="same-address" checkbox="{{ isSame }}" name="same_address" value="true">
-            <label class="billing-option" id="same-address-label" for="same-address"  style="text-align: left">Home Address same as Billing?</label>
-        </div>
-        <fieldset id="home-fieldset" style="margin-top: 10px">
-            <div label="* Address" class="row">
-                <input type="text" id="address" value="{{ profile.home_address.address }}" name="address" autocomplete="off">
+            <div id="billing-information">
+                <fieldset>
+                    <h4 class="seller-info-header">Billing Information</h4>
+                    <div id="company-name-row" style="display: none">
+                        <div label="* Company Name" class="row">
+                            <input type="text" id="company-name" value="{{ profile.company_name }}" name="company_name" maxlength="20" autocomplete="off">
+                        </div>
+                    </div>
+                    <div label="* Address" class="row">
+                        <input type="text" id="billing-address" value="{{ profile.billing_address.address }}" name="billing_address" maxlength="20" autocomplete="street-address">
+                    </div>
+                    <div label="* City" class="row">
+                        <input type="text" id="billing-city" value="{{ profile.billing_address.city }}" name="billing_city" maxlength="20" autocomplete="address-level2">
+                    </div>
+                    <div label="* State" class="row">
+                        <input type="text" id="billing-state" value="{{ profile.billing_address.state }}" name="billing_state" maxlength="20" autocomplete="address-level1">
+                    </div>
+                    <div label="* Country" class="row">
+                        <input type="text" id="billing-country" value="{{ profile.billing_address.country }}" maxlength="20" name="billing_country" autocomplete="country-name">
+                    </div>
+                    <div label="* Postal Code" class="row">
+                        <input type="text" id="address-zip" value="{{ profile.home_address.zip }}" maxlength="10" name="billing_zip">
+                    </div>
+                </fieldset>
             </div>
-            <div label="* City" class="row">
-                <input type="text" id="address-city" value="{{ profile.home_address.city }}" name="city">
+            <div class="billing-options">
+                <input type="checkbox" id="same-address" checkbox="{{ isSame }}" name="same_address" value="true">
+                <label class="billing-option" id="same-address-label" for="same-address"  style="text-align: left">Home Address same as Billing?</label>
             </div>
-            <div label="* State" class="row">
-                <input type="text" id="address-state" value="{{ profile.home_address.state }}" name="state">
-            </div>
-            <div label="* Country" class="row">
-                <input type="text" id="address-country" value="{{ profile.home_address.country }}" name="country">
-            </div>
-            <div label="* Postal Code" class="row">
-                <input type="text" id="address-zip" value="{{ profile.home_address.zip }}" name="zip">
-            </div>
-        </fieldset>
-        <input type="hidden" id="is-individual" value="{{ isIndividual }}">
-        <input type="hidden" id="is-company" value="{{ isCompany }}">
-        <input type="hidden" id="is-same" value="{{ isSame }}">
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-        <button type="submit">Update</button>
-    </form>
+            <fieldset id="home-fieldset" style="margin-top: 10px">
+                <div label="* Address" class="row">
+                    <input type="text" id="address" value="{{ profile.home_address.address }}" name="address" autocomplete="off">
+                </div>
+                <div label="* City" class="row">
+                    <input type="text" id="address-city" value="{{ profile.home_address.city }}" name="city">
+                </div>
+                <div label="* State" class="row">
+                    <input type="text" id="address-state" value="{{ profile.home_address.state }}" name="state">
+                </div>
+                <div label="* Country" class="row">
+                    <input type="text" id="address-country" value="{{ profile.home_address.country }}" name="country">
+                </div>
+                <div label="* Postal Code" class="row">
+                    <input type="text" id="address-zip" value="{{ profile.home_address.zip }}" name="zip">
+                </div>
+            </fieldset>
+            <input type="hidden" id="is-individual" value="{{ isIndividual }}">
+            <input type="hidden" id="is-company" value="{{ isCompany }}">
+            <input type="hidden" id="is-same" value="{{ isSame }}">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+            <button type="submit">Update</button>
+        </form>
+    </div>
 </div>
 
 <script type="text/javascript" src="/javascripts/create-profile.min.js"></script>

@@ -1,28 +1,24 @@
-<link rel="stylesheet" href="/stylesheets/orderhistory.css">
-
-<div class="secondary-container">
-    <h1>My Orders</h1>
-    {{#each orders }}
-        <div class="thumbnail  clearfix" style="width: 100%; text-align: left;">
-            <div class="caption pull-right">
-                <a href="/products/{{ this.product.item_id }}"><h3>{{ this.product.title }}</h3></a>
-                <p>Purchase Date : {{ this.purchase_date }}</p>
-                {{#if this._seller.company_name }}
-                    <p class="seller-text">by {{ this._seller.company_name }}</p>
-                {{else}}
-                    <p class="seller-text">by {{ this._seller.email }}</p>
-                {{/if}}
-                <p class="price-text full-price">${{ this.product.price }}</p>
-                <p>{{ this.product.description }}</p>
+<div class="primary-container">
+    <div class="secondary-container">
+        <h1>Customer Orders</h1>
+        {{#each orders }}
+            <div class="thumbnail  clearfix" style="width: 100%; text-align: left;">
+                <div class="caption pull-right">
+                    <a href="/products/{{ this._product._id }}"><h3>{{ this._product.title }}</h3></a>
+                    <p>Purchase Date : {{ this.purchase_date }}</p>
+                    <p class="seller-text">Name: {{ this.name }}</p>
+                    <p class="seller-text">Email: {{ this.email }}</p>
+                    <p class="price-text full-price">${{ this.amount }}</p>
+                </div>
+                <div class="image-container">
+                    <a class="clearfix" href="/products/{{ this._product._id }}">
+                        <img src="{{ this._product.image_path }}" alt="...">
+                    </a>
+                </div>
             </div>
-            <div class="image-container">
-                <a class="clearfix" href="/products/{{ this.product.item_id }}">
-                    <img src="{{ this.product.image_path }}" alt="...">
-                </a>
-            </div>
-        </div>
-    {{/each }}
-    {{#unless orders }}
-        <h3 style="color: #6A7C94">No orders to show right now.</h3>
-    {{/unless }}
+        {{/each }}
+        {{#unless orders }}
+            <h3 style="color: #6A7C94">No orders to show right now.</h3>
+        {{/unless }}
+    </div>
 </div>

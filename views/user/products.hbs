@@ -1,48 +1,41 @@
-<form id="search-form" class="form" action="/search-product" method="GET">
-    <fieldset>
-        <div label="Search" class="row">
-            <input type="text" name="search" placeholder="Search products" autofocus="autofocus"/>
+<div class="primary-container">
+    <h1>{{ this.title }}</h1>
+
+    {{#each products }}
+        <div class="row clearfix">
+            {{#each this }}
+                <div class="thumbnail  clearfix">
+                    <div class="caption pull-right">
+                        <a href="/products/{{ this._id }}"><h3>{{ this.title }}</h3></a>
+                        {{#if this._seller.company_name }}
+                            <p class="seller-text">by {{ this._seller.company_name }}</p>
+                        {{else}}
+                            <p class="seller-text">by {{ this._seller.email }}</p>
+                        {{/if}}
+                        <p class="price-text full-price">${{ this.price }}</p>
+                        <p>{{ this.available }} available</p>
+                        <a href="/user/account/update-product/{{ this._id }}">Edit</a>
+                        </br>
+                        <a href="/user/account/delete-product/{{ this._id }}">Delete</a>
+                    </div>
+                    <div class="image-container">
+                        <a class="clearfix" href="/products/{{ this._id }}">
+                            <img src="{{ this.image_path }}" alt="..."/>
+                        </a>
+                    </div>
+                </div>
+            {{/each }}
         </div>
-    </fieldset>
-    <button type="submit">Search</button>
-</form>
+    {{/each }}
 
-<h1>{{ this.title }}</h1>
-
-{{#each products }}
-    <div class="row clearfix">
-        {{#each this }}
-            <div class="thumbnail  clearfix">
-                <div class="caption pull-right">
-                    <a href="/products/{{ this._id }}"><h3>{{ this.title }}</h3></a>
-                    {{#if this._seller.company_name }}
-                        <p class="seller-text">by {{ this._seller.company_name }}</p>
-                    {{else}}
-                        <p class="seller-text">by {{ this._seller.email }}</p>
-                    {{/if}}
-                    <p class="price-text full-price">${{ this.price }}</p>
-                    <p>{{ this.available }} available</p>
-                    <a href="/user/account/update-product/{{ this._id }}">Edit</a>
-                    </br>
-                    <a href="/user/account/delete-product/{{ this._id }}">Delete</a>
-                </div>
-                <div class="image-container">
-                    <a class="clearfix" href="/products/{{ this._id }}">
-                        <img src="{{ this.image_path }}" alt="..."/>
-                    </a>
-                </div>
+    {{#unless products }}
+        <div class="form-container" style="text-align: center">
+            <div class="sell-info-container">
+                <h3>You’re ready to get paid!</h3>
+                <form action="/user/account/add-product" method="GET">
+                    <button type="submit">Add Product</button>
+                </form>
             </div>
-        {{/each }}
-    </div>
-{{/each }}
-
-{{#unless products }}
-    <div class="form-container" style="text-align: center">
-        <div class="sell-info-container">
-            <h3>You’re ready to get paid!</h3>
-            <form action="/user/account/add-product" method="GET">
-                <button type="submit">Add Product</button>
-            </form>
         </div>
-    </div>
-{{/unless }}
+    {{/unless }}
+</div>

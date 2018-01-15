@@ -8,7 +8,7 @@ const fs                    = require('fs');
 
 // models
 const Product               = require('../models/Product');
-const Image                 = require('../models/Image');
+const File                  = require('../models/File');
 const Review                = require('../models/Review');
 const Order                 = require('../models/Order');
 
@@ -42,10 +42,12 @@ productController.getIndividualProduct = async (req, res, next) => {
         isDownload = true;
     }
 
-    reviews.map((review) => {
-        ratingTotal += review.rating;
-    });
-    ratingAverage = nearestHundredths(ratingTotal / reviewCount);
+    if (reviewCount !== 0) {
+        reviews.map((review) => {
+            ratingTotal += review.rating;
+        });
+        ratingAverage = nearestHundredths(ratingTotal / reviewCount);
+    }
 
     try {
         // store any messages in variables if any
@@ -57,38 +59,23 @@ productController.getIndividualProduct = async (req, res, next) => {
         //     if (err) console.log(err);
         //     console.log(result);
         // });
-        if (reviewCount !== 0 && ratingAverage !== product.rating) {
-            Product.findByIdAndUpdate(productID, { $set: {
-                rating: ratingAverage
-            }}, {new: true}, (err, result) => {
-                if (err) console.log(err);
-                return res.status(200).render('shop/product', {
-                    title: `${process.env.APP_NAME}: ${product.title}`,
-                    product: product,
-                    searchVal: searchVal,
-                    rating: result.rating,
-                    ratingAvg: ratingAverage,
-                    reviewCount: reviewCount,
-                    isDownload: isDownload,
-                    successMsg: successMsg,
-                    hasSuccess: successMsg.length > 0,
-                    messages: messages, 
-                    hasErrors: messages.length > 0
-                });
+        Product.findByIdAndUpdate(productID, { $set: {
+            rating: ratingAverage
+        }}, {new: true}, (err, result) => {
+            if (err) console.log(err);
+            return res.status(200).render('shop/product', {
+                title: `${process.env.APP_NAME}: ${product.title}`,
+                product: product,
+                searchVal: searchVal,
+                rating: result.rating,
+                ratingAvg: ratingAverage,
+                reviewCount: reviewCount,
+                isDownload: isDownload,
+                successMsg: successMsg,
+                hasSuccess: successMsg.length > 0,
+                messages: messages, 
+                hasErrors: messages.length > 0
             });
-        }
-        return res.status(200).render('shop/product', {
-            title: `${process.env.APP_NAME}: ${product.title}`,
-            product: product,
-            searchVal: searchVal,
-            rating: product.rating,
-            ratingAvg: ratingAverage,
-            reviewCount: reviewCount,
-            isDownload: isDownload,
-            successMsg: successMsg,
-            hasSuccess: successMsg.length > 0,
-            messages: messages, 
-            hasErrors: messages.length > 0
         });
     } catch (err) {
         next(err);
@@ -189,7 +176,7 @@ productController.postProductUpload = (req, res) => {
             // save image path to product model
             product.image_path = `/uploads/${file.filename}`;
             // create image model
-            const image = new Image({
+            const file = new File({
                 _user: req.user._id,
                 originalname: file.originalname,
                 encoding: file.encoding,
@@ -202,7 +189,7 @@ productController.postProductUpload = (req, res) => {
             // save product to db
             product.save((err, product) => {
                 // save image to db
-                image.save((err, image) => {
+                file.save((err, image) => {
                     req.flash('success', 'Product added successfully.');
                     // redirect to account product page
                     return res.status(201).redirect('/user/products');
@@ -274,20 +261,20 @@ productController.putUpdateProductUpload = (req, res) => {
         });
     // else if no image upload errors
     } else {
-        const file = req.file;
+        const genFile = req.file;
         // if image upload
         if (req.session.image) {
             req.session.image = null;
             // create image model
-            const image = new Image({
+            const file = new File({
                 _user: req.user._id,
-                originalname: file.originalname,
-                encoding: file.encoding,
-                mimetype: file.mimetype,
-                destination: file.destination,
-                filename: file.filename,
-                path: `/uploads/${file.filename}`,
-                size: file.size
+                originalname: genFile.originalname,
+                encoding: genFile.encoding,
+                mimetype: genFile.mimetype,
+                destination: genFile.destination,
+                filename: genFile.filename,
+                path: `/uploads/${genFile.filename}`,
+                size: genFile.size
             });
             // find product data
             Product.findOne({_id: productID}, async (err, oldProduct) => {
@@ -300,11 +287,11 @@ productController.putUpdateProductUpload = (req, res) => {
                     fs.unlink(`${__dirname}/../public${oldProduct.image_path}`, function(err) {
                         if(err) return console.log(err);
                         // remove previous image data
-                        Image.remove({path: oldProduct.image_path});
+                        File.remove({path: oldProduct.image_path});
                     });  
                 });
                 // save new image data
-                await image.save();
+                await file.save();
                 // update product in db
                 await Product.update({_id: productID}, { $set: {
                     title: title,
@@ -312,7 +299,7 @@ productController.putUpdateProductUpload = (req, res) => {
                     price: price,
                     available: available,
                     // update image path
-                    image_path: `/uploads/${file.filename}`
+                    image_path: `/uploads/${genFile.filename}`
                 }}, {new: true});
             });
             // redirect to account product page
@@ -374,7 +361,7 @@ productController.deleteProductPerm = (req, res) => {
             });  
         });
         // remove image data
-        await Image.remove({path: product.image_path});
+        await File.remove({path: product.image_path});
         // remove product data in db
         await Product.remove({_id: productID});
     });

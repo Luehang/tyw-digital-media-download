@@ -1,9 +1,45 @@
 <nav>
-    <div class="nav-container">
-        <h3>
-            <a href="/">
-                {{ appName }}
-            </a>   
-        </h3>
+    <div class="list-icon-container">
+        <div class="list-mobile-container">
+            <h3 class="nav-title">
+                <a href="/">
+                    {{ appName }}
+                </a>   
+            </h3>
+            {{#if login }}
+                <div class="icon-list">
+                    <div class="list-bar"></div>
+                    <div class="list-bar"></div>
+                    <div class="list-bar"></div>
+                </div>
+            {{/if }}
+        </div>
+    </div>
+    <div class="main-list-container dropdown-menu menu-1">
+        <div class="nav-container">
+            <div id="dropdown-menu-1" class="dropdown-menu-disable">
+                <ul class="main-list">
+                    <li class="nav-title">
+                        <a href="/">
+                            {{ appName }}
+                        </a>
+                    </li>
+                </ul>
+                {{#if login }}
+                    <ul class="secondary-list">
+                        <ul class="social-list">
+                            <li class="login-text"><i class="fa fa-user" aria-hidden="true"></i> User <span class="caret"></span>
+                                <ul class="dropdown-menu menu-1">
+                                        <li class="dropdown-menu-disable"><a href="/user/profile">User Profile</a></li>
+                                        <li class="dropdown-menu-disable"><a href="/user/products">User Products</a></li>
+                                        <li class="dropdown-menu-disable"><a href="/user/orderhistory">Order History</a></li>
+                                        <li class="dropdown-menu-disable"><a href="/user/logout">Logout</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </ul>
+                {{/if }}
+            </div>
+        </div>
     </div>
 </nav> <!-- end nav -->

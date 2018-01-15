@@ -19,10 +19,10 @@ const userController = {};
  */
 userController.getOrderHistoryPage = (req, res) => {
     // find order data
-    Order.find({_buyer: req.user})
+    Order.find({})
         .populate({
-            path: '_seller',
-            select: 'email company_name -_id'
+            path: '_product',
+            select: 'title image_path'
         })
         .sort({purchase_date: -1})
         .limit(50)
@@ -50,7 +50,7 @@ userController.getProfilePage = (req, res) => {
     // find profile data
     Profile.findOne({user: req.user}).populate({
         path: 'user',
-        select: 'email stripe_account_id -_id'
+        select: 'email -_id'
     }).then((userProfile) => {
         // render profile
         res.render('user/profile', {

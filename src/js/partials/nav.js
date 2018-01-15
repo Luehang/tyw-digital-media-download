@@ -15,6 +15,15 @@ $('.menu-text').click(function() {
         $('.menu-text li').css('display', 'none');
     }
 });
+
+// mobile dropdown menu click event for social login
+$('.login-text').click(function() {
+    if ($(this).find('li').css('display') === "none") {
+        $('.login-text li').css('display', 'block');
+    } else {
+        $('.login-text li').css('display', 'none');
+    }
+});
     
 // mobile close dropdown menu after click event
 $('nav a').click(function() {
