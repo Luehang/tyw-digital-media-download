@@ -465,25 +465,43 @@ productController.getDeleteProductForm = (req, res) => {
  * Submit and validate product to be deleted permanently. Then delete 
  * product data, image data and actual image.
  */
-productController.deleteProductPerm = (req, res) => {
+productController.deleteProductPerm = async (req, res) => {
     const productID = req.params.id;
     // find product data in db
-    Product.findOne({_id: productID}, async (err, product) => {
-        // check if image exists and deletes it
+    const [ product ] = await Promise.all([
+        Product.findOne({_id: productID}).lean().exec()
+    ]);
+    // validate product title
+    if (req.body.title !== product.title) {
+        req.flash('error', 'Product names do not match.');
+        return res.redirect(`/user/account/delete-product/${product._id}`);
+    }
+    try {
+        // check if image exists 
         await fs.stat(`${__dirname}/../public${product.image_path}`, (err, stats) => {
-            if (err) {
-                return console.error(err);
-            }
-            // delete image
-            fs.unlink(`${__dirname}/../public${product.image_path}`, function(err) {
+            if (err) return console.error(err);
+            // deletes image
+            fs.unlink(`${__dirname}/../public${product.image_path}`, (err) => {
                 if(err) return console.log(err);
             });  
         });
-        // remove image data
-        await Image.remove({path: product.image_path});
+        // check if download exists 
+        await fs.stat(`${__dirname}/../public${product.download_path}`, (err, stats) => {
+            if (err) return console.error(err);
+            // deletes download
+            fs.unlink(`${__dirname}/../public${product.download_path}`, (err) => {
+                if(err) return console.log(err);
+            });  
+        });
+        // remove image and download data
+        await Download.remove({path: product.image_path});
+        await Download.remove({path: product.download_path});
         // remove product data in db
         await Product.remove({_id: productID});
-    });
+    } catch (err) {
+        console.log(err);
+        return res.end();
+    }
     // redirect to user products
     req.flash('success', "Successfully deleted product.")
     res.redirect('/user/products');
