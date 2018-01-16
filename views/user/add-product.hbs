@@ -9,6 +9,8 @@
             {{/if}}
                 method="POST" enctype="multipart/form-data">
             <fieldset>
+                <input type="hidden" name="isUpdate" value="{{update}}" />
+                <input type="hidden" name="csrfToken" value="{{ csrfToken }}">
                 <h3>Product</h3>
                 <hr>
                 <div label="* Title" class="row">
@@ -29,7 +31,7 @@
                     <p style="margin: 0 0 10px; font-size: 10px;">recommend 500 KB</p>
                 </div>
                 <div label="Selected File:" class="row">
-                    <input id="file-return" type="text" value="" disabled/>
+                    <input id="file-return" type="text" value="{{product.download_path}}" disabled/>
                 </div>
                 <div class="input-file-container">  
                     <input class="input-file" id="my-file" type="file" name="downloadFile"/>

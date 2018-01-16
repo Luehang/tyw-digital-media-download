@@ -7,13 +7,10 @@
                 <div class="thumbnail  clearfix">
                     <div class="caption pull-right">
                         <a href="/products/{{ this._id }}"><h3>{{ this.title }}</h3></a>
-                        {{#if this._seller.company_name }}
-                            <p class="seller-text">by {{ this._seller.company_name }}</p>
-                        {{else}}
-                            <p class="seller-text">by {{ this._seller.email }}</p>
-                        {{/if}}
+                        <p class="inner-text">Created at: {{ this.created_at }}</p>
+                        <p class="inner-text">Description: {{ this.description }}</p>
+                        <p class="inner-text">Total Downloads: {{ this.download }}</p>
                         <p class="price-text full-price">${{ this.price }}</p>
-                        <p>{{ this.available }} available</p>
                         <a href="/user/account/update-product/{{ this._id }}">Edit</a>
                         </br>
                         <a href="/user/account/delete-product/{{ this._id }}">Delete</a>

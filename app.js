@@ -77,7 +77,6 @@ app.use(bodyParser.json());
 // for parsing application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 
-
 app.use(validator());
 
 // use to parse cookie

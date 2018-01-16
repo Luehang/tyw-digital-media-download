@@ -72,4 +72,43 @@ functionController.isCurrency = (number) => {
     return false;
 }
 
+/**
+ * Function to return normal formatted time date.
+ *
+ */
+functionController.returnDateTime = (ISOdate) => {
+    let date = new Date(ISOdate);
+    let hours = date.getHours();
+    let mins = date.getMinutes().toString();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+    let year = date.getFullYear();
+    let time = "";
+    if (mins.length === 1) {
+        mins = "0" + mins;
+    }
+    if (hours >= 13) {
+        hours = hours - 12;
+        time = `${month}/${day}/${year} at ${hours}:${mins} PM`;
+    } else if (hours === 0) {
+        hours = 12;
+        time = `${month}/${day}/${year} at ${hours}:${mins} AM`;
+    } else {
+        time = `${month}/${day}/${year} at ${hours}:${mins} AM`;
+    }
+    return time;
+}
+
+/**
+ * Function to generate random string at vary length.
+ *
+ */
+functionController.randomString = (num) => {
+    let string = "";
+    for (var i = 0; i < num; i++) {
+        string += Math.random().toString(36).substring(2);
+    }
+    return string;
+}
+
 module.exports = functionController;

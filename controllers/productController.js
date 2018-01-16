@@ -16,6 +16,7 @@ const Order                 = require('../models/Order');
 const functionController    = require('./functionController');
 const nearestHundredths     = functionController.nearestHundredths;
 const isCurrency            = functionController.isCurrency;
+const randomString          = functionController.randomString;
 
 const productController = {};
 
@@ -90,10 +91,14 @@ productController.getIndividualProduct = async (req, res, next) => {
  * Show add product form.
  */
 productController.getAddProductForm = (req, res) => {
+    // generate random csrf token and store in session
+    const csrfToken = randomString(3);
+    req.session.csrfToken = csrfToken;
     // store any messages in variables if any
     const messages = req.flash('error');
     res.render('user/add-product', {
         title: 'Add Products',
+        csrfToken: csrfToken,
         update: false,
         messages: messages, 
         hasErrors: messages.length > 0
@@ -129,6 +134,12 @@ const upload = multer({
  */
 productController.postProductUploadMiddleware = (req, res, next) => {
     upload(req, res, (err) => {
+        // csrf protection
+        if (req.session.csrfToken !== req.body.csrfToken) {
+            return res.end();
+        }
+        req.session.csrfToken = null;
+        const isUpdate = req.body.isUpdate === "true" ? true : false;
         // if no title
         if (req.body.title === "") {
             req.flash('error', 'Need to add a product title.');
@@ -144,9 +155,42 @@ productController.postProductUploadMiddleware = (req, res, next) => {
             req.session.error = err;
             return next();
         } else {
-            // if no errors
-            if(req.files.imageFile !== undefined && req.files.downloadFile !== undefined) {
-                next();
+            // if update has only download upload
+            if(req.files.imageFile === undefined && 
+               req.files.downloadFile !== undefined
+               && isUpdate) {
+                    req.session.imageUpload = false;
+                    req.session.downloadUpload = true;
+                    return next();
+            }
+            // if update has only image upload
+            if(req.files.imageFile !== undefined && 
+                req.files.downloadFile === undefined
+                && isUpdate) {
+                    req.session.imageUpload = true;
+                    req.session.downloadUpload = false;
+                    return next();
+            }
+            // if update has image and download upload
+            if(req.files.imageFile !== undefined && 
+                req.files.downloadFile !== undefined
+                && isUpdate) {
+                    req.session.imageUpload = true;
+                    req.session.downloadUpload = true;
+                    return next();
+            }
+            // if update has no file upload
+            if(req.files.imageFile === undefined && 
+                req.files.downloadFile === undefined
+                && isUpdate) {
+                    req.session.imageUpload = false;
+                    req.session.downloadUpload = false;
+                    return next();
+            }
+            // if adding product with no errors
+            if(req.files.imageFile !== undefined && 
+               req.files.downloadFile !== undefined) {
+                return next();
             }
         }
     });
@@ -163,21 +207,11 @@ productController.postProductUpload = async (req, res) => {
     const { title, description, price } = req.body;
     // create product model
     const product = new Product({
+        _user: req.user,
         title,
         description,
         price
     });
-    // title: {type: String, required: true},
-    // image_path: {type: String, default: "/img/no-image.jpg"},
-    // download_path: {type: String},
-    // description: {type: String, default: 'No description available.'},
-    // price: {type: Number, required: true},
-    // sold: {type: Number, default: 0},
-    // download: {type: Number, default: 0},
-    // rating: {type: Number, default: null},
-    // category: {type: String, default: null},
-    // main: {type: Boolean, default: false},
-    // featured: {type: Boolean, default: false}
     // if any image upload errors
     if (req.session.error) {
         req.flash('error', req.session.error);
@@ -195,8 +229,6 @@ productController.postProductUpload = async (req, res) => {
     try {
         const imageFile = req.files.imageFile[0];
         const downloadFile = req.files.downloadFile[0];
-        // if image upload
-        req.session.upload = null;
         // save image and download path to product model
         product.image_path = `/uploads/${imageFile.filename}`;
         product.download_path = `/uploads/${downloadFile.filename}`;
@@ -243,6 +275,9 @@ productController.postProductUpload = async (req, res) => {
  */
 productController.getUpdateProductForm = (req, res) => {  
     const productID = req.params.id;
+    // generate random csrf token and store in session
+    const csrfToken = randomString(3);
+    req.session.csrfToken = csrfToken;
     // find product in db
     Product.findOne({_id: productID}, (err, product) => {
         if (err) {
@@ -251,6 +286,7 @@ productController.getUpdateProductForm = (req, res) => {
         // render update product form
         res.status(200).render('user/add-product', {
             title: 'Update Product',
+            csrfToken: csrfToken,
             update: true,
             product: product
         });
@@ -263,17 +299,17 @@ productController.getUpdateProductForm = (req, res) => {
  * Submit and validate product to be updated. Then delete old image and
  * upload new image if any.
  */
-productController.putUpdateProductUpload = (req, res) => {
+productController.putUpdateProductUpload = async (req, res, next) => {
     const { title, description, price } = req.body;
     const productID = req.params.id;
     // if any image upload errors
     if (req.session.error) {
         // create product model
         const product = new Product({
-            _seller: req.user._id,
-            title: title,
-            description: description,
-            price: price
+            _user: req.user,
+            title,
+            description,
+            price
         });
         // store session error
         req.flash('error', req.session.error);
@@ -286,67 +322,123 @@ productController.putUpdateProductUpload = (req, res) => {
             hasErrors: errorMessages.length > 0,
             product: product
         });
-    // else if no image upload errors
-    } else {
-        const file = req.file;
-        // if image upload
-        if (req.session.image) {
-            req.session.image = null;
-            // create image model
-            const image = new Download({
+    }
+    try {
+        let imageFile = {};
+        let downloadFile = {};
+        let image;
+        let download;
+        const product = await Promise.all([
+            Product.findOne({_id: productID}).lean().exec()
+        ]);
+        await Product.update({_id: productID}, { $set: {
+            title: title,
+            description: description,
+            price: price,
+            updated_at: new Date()
+        }}, {upsert: true});
+        // create download model
+        if (req.session.imageUpload) {
+            imageFile = req.files.imageFile[0];
+            image = new Download({
                 _user: req.user._id,
-                originalname: file.originalname,
-                encoding: file.encoding,
-                mimetype: file.mimetype,
-                destination: file.destination,
-                filename: file.filename,
-                path: `/uploads/${file.filename}`,
-                size: file.size
-            });
-            // find product data
-            Product.findOne({_id: productID}, async (err, oldProduct) => {
-                // check if image exists 
-                await fs.stat(`${__dirname}/../public${oldProduct.image_path}`, (err, stats) => {
-                    if (err) {
-                        return console.error(err);
-                    }
-                    // deletes image
-                    fs.unlink(`${__dirname}/../public${oldProduct.image_path}`, function(err) {
-                        if(err) return console.log(err);
-                        // remove previous image data
-                        Image.remove({path: oldProduct.image_path});
-                    });  
-                });
-                // save new image data
-                await image.save();
-                // update product in db
-                await Product.update({_id: productID}, { $set: {
-                    title: title,
-                    description: description,
-                    price: price,
-                    available: available,
-                    // update image path
-                    image_path: `/uploads/${file.filename}`
-                }}, {new: true});
-            });
-            // redirect to account product page
-            req.flash('success', 'Product updated successfully.');
-            res.status(201).redirect(`/products/${productID}`);
-        // else if no image upload
-        } else {
-            req.session.image = null;
-            // update product in db
-            Product.update({_id: productID}, { $set: {
-                title: title,
-                description: description,
-                price: price,
-                available: available
-            }}, {new: true}, (err, product) => {
-                // redirect to account product page
-                req.flash('success', 'Product updated successfully.');
-                res.status(201).redirect(`/products/${productID}`);
+                originalname: imageFile.originalname,
+                encoding: imageFile.encoding,
+                mimetype: imageFile.mimetype,
+                destination: imageFile.destination,
+                filename: imageFile.filename,
+                path: `/uploads/${imageFile.filename}`,
+                size: imageFile.size
             });
         }
+        if (req.session.downloadUpload) {
+            downloadFile = req.files.downloadFile[0];
+            download = new Download({
+                _user: req.user._id,
+                originalname: downloadFile.originalname,
+                encoding: downloadFile.encoding,
+                mimetype: downloadFile.mimetype,
+                destination: downloadFile.destination,
+                filename: downloadFile.filename,
+                path: `/uploads/${downloadFile.filename}`,
+                size: downloadFile.size
+            });
+        }
+        // if update has only image upload
+        if (req.session.imageUpload && !req.session.downloadUpload) {
+            // update image path
+            await Product.update({_id: productID}, { $set: {
+                image_path: `/uploads/${imageFile.filename}`
+            }}, {upsert: true});
+            // check if image exists 
+            await fs.stat(`${__dirname}/../public${product[0].image_path}`, (err, stats) => {
+                if (err) return console.error(err);
+                // deletes image
+                fs.unlink(`${__dirname}/../public${product[0].image_path}`, (err) => {
+                    if(err) return console.log(err);
+                });  
+            });
+            // remove previous image data
+            await Download.remove({path: product[0].image_path});
+            // save new image data
+            await image.save();
+        }
+        // if update has only download upload
+        if (!req.session.imageUpload && req.session.downloadUpload) {
+            // update download path
+            Product.update({_id: productID}, { $set: {
+                download_path: `/uploads/${downloadFile.filename}`
+            }}, {upsert: true}, async (err, doc) => {
+                // check if download exists 
+                await fs.stat(`${__dirname}/../public${product[0].download_path}`, (err, stats) => {
+                    if (err) return console.error(err);
+                    // deletes download
+                    fs.unlink(`${__dirname}/../public${product[0].download_path}`, (err) => {
+                        if(err) return console.log(err);
+                    });  
+                });
+                // remove previous download data
+                await Download.remove({path: product[0].download_path});
+                // save new download data
+                await download.save();
+            });
+        }
+        // if update has image and download upload
+        if (req.session.imageUpload && req.session.downloadUpload) {
+            // update new paths
+            Product.update({_id: productID}, { $set: {
+                image_path: `/uploads/${imageFile.filename}`,
+                download_path: `/uploads/${downloadFile.filename}`
+            }}, {upsert: true}, async (err, doc) => {
+                // check if image exists 
+                await fs.stat(`${__dirname}/../public${product[0].image_path}`, (err, stats) => {
+                    if (err) return console.error(err);
+                    // deletes image
+                    fs.unlink(`${__dirname}/../public${product[0].image_path}`, (err) => {
+                        if(err) return console.log(err);
+                    });  
+                });
+                // check if download exists 
+                await fs.stat(`${__dirname}/../public${product[0].download_path}`, (err, stats) => {
+                    if (err) return console.error(err);
+                    // deletes download
+                    fs.unlink(`${__dirname}/../public${product[0].download_path}`, (err) => {
+                        if(err) return console.log(err);
+                    });  
+                });
+                // remove previous data and save new
+                await Download.remove({path: product[0].image_path});
+                await Download.remove({path: product[0].download_path});
+                await image.save();
+                await download.save();
+            });
+        }
+        // redirect to product page
+        req.flash('success', 'Product updated successfully.');
+        return res.status(201).redirect(`/products/${productID}`);
+    } catch(err) {
+        console.log(err);
+        res.end();
     }
 }
 
@@ -446,10 +538,10 @@ productController.getQueryProduct = (view, title, limit, maxLimit, queryParam) =
             }
             if (req.user) {
                 if (req.query.search === req.user._id) {
-                    query = {_seller: req.user};
+                    query = {_user: req.user};
                 }
                 if ((/^user/i).test(queryParam)) {
-                    query = {_seller: req.user};
+                    query = {_user: req.user};
                 }
             }
             // if (typeof queryParam === 'object') {
@@ -464,10 +556,6 @@ productController.getQueryProduct = (view, title, limit, maxLimit, queryParam) =
                     .sort({created_at: -1})
                     .limit(req.query.limit)
                     .skip(Number.parseInt(req.query.skip) || req.skip)
-                    .populate({
-                        path: '_seller', 
-                        select: 'email company_name -_id'
-                    })
                     .lean()
                     .exec(),
                 Product.count(query)

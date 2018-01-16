@@ -4,6 +4,7 @@ const mongoosePaginate      = require('mongoose-paginate');
 mongoose.Promise            = require('bluebird');
 
 const productSchema = new Schema({
+    _user: {type: Schema.Types.ObjectId, ref: 'User'},
     title: {type: String, required: true},
     image_path: {type: String, default: "/img/no-image.jpg"},
     download_path: {type: String},
@@ -16,6 +17,7 @@ const productSchema = new Schema({
     main: {type: Boolean, default: false},
     featured: {type: Boolean, default: false},
     created_at: {type: Date, default: Date.now},
+    updated_at: {type: Date, default: Date.now},
     is_deleted: {type: Boolean, default: false}
 });
 

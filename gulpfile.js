@@ -26,7 +26,7 @@ gulp.task("jsMain", () => {
             presets: ['env']
         }))
         .pipe(uglify())
-        .pipe(maps.write('../../maps'))
+        .pipe(maps.write('.'))
         .pipe(gulp.dest('public/javascripts'));
 });
 
@@ -75,8 +75,8 @@ gulp.task('sassMain', () => {
         .pipe(maps.init({ loadMaps: true }))
         .pipe(maps.identityMap())
         .pipe(sass())
-        .pipe(maps.write('../../maps'))
-        .pipe(rename('index.min.css'))
+        .pipe(maps.write('.'))
+        .pipe(rename('application.min.css'))
         .pipe(gulp.dest('public/stylesheets'));
 });
 

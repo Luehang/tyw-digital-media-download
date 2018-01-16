@@ -14,7 +14,7 @@ User.findOne({email: 'user@test.com'}, async (err, user) => {
     if (err) console.error(err);
     const products = [
         new Product({
-            _seller: user._id,
+            _user: user._id,
             title: 'The Italian Dolomites',
             image_path: "https://c1.staticflickr.com/1/632/21136101110_1dde1c1a7e_o.jpg",
             download_path: "https://c1.staticflickr.com/1/632/21136101110_1dde1c1a7e_o.jpg",
@@ -23,7 +23,7 @@ User.findOne({email: 'user@test.com'}, async (err, user) => {
             rating: 5
         }),
         new Product({
-            _seller: user._id,
+            _user: user._id,
             title: 'Visiting Vester Peak',
             image_path: "https://farm1.staticflickr.com/571/21101592188_f5da31c3f5_o.jpg",
             download_path: "https://farm1.staticflickr.com/571/21101592188_f5da31c3f5_o.jpg",
@@ -32,7 +32,7 @@ User.findOne({email: 'user@test.com'}, async (err, user) => {
             rating: 4
         }),
         new Product({
-            _seller: user._id,
+            _user: user._id,
             title: 'Trailing Together',
             image_path: "https://i.redd.it/ool7yp323aux.jpg",
             download_path: "https://i.redd.it/ool7yp323aux.jpg",
@@ -41,7 +41,7 @@ User.findOne({email: 'user@test.com'}, async (err, user) => {
             rating: 3.4
         }),
         new Product({
-            _seller: user._id,
+            _user: user._id,
             title: 'The Magic Pond',
             image_path: "https://i.redd.it/cz572ctve9ux.jpg",
             download_path: "https://i.redd.it/cz572ctve9ux.jpg",
@@ -50,7 +50,7 @@ User.findOne({email: 'user@test.com'}, async (err, user) => {
             rating: 3.6
         }),
         new Product({
-            _seller: user._id,
+            _user: user._id,
             title: 'Beach Essentials',
             image_path: "https://i.redd.it/etwqy45ntqcx.jpg",
             download_path: "https://i.redd.it/etwqy45ntqcx.jpg",
@@ -59,7 +59,7 @@ User.findOne({email: 'user@test.com'}, async (err, user) => {
             rating: 4.6
         }),
         new Product({
-            _seller: user._id,
+            _user: user._id,
             title: 'Romantic Camping',
             image_path: "https://farm6.staticflickr.com/5692/21342201074_aef835df8d_k.jpg",
             download_path: "https://farm6.staticflickr.com/5692/21342201074_aef835df8d_k.jpg",
@@ -68,7 +68,7 @@ User.findOne({email: 'user@test.com'}, async (err, user) => {
             rating: 3.7
         }),
         new Product({
-            _seller: user._id,
+            _user: user._id,
             title: 'Cave Explorers',
             image_path: "https://i.redd.it/co3a6ufwmuqx.jpg",
             download_path: "https://i.redd.it/co3a6ufwmuqx.jpg",

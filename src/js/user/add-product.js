@@ -50,6 +50,7 @@ function isCurrency(number) {
 
 // // add product form submit event
 addProductFormSubmitButton.addEventListener('click', function(event) {
+    const isUpdate = $('#add-product-form').find('.button').html().toLowerCase() === 'update';
     var errorMessages = [];
     var toHTML = "";
     // if no title
@@ -61,11 +62,11 @@ addProductFormSubmitButton.addEventListener('click', function(event) {
         errorMessages.push('Product price needs to be formatted in USD currency. Ex. 99.90');
     }
     // if no image upload
-    if(imageInput.value === "") {
+    if(imageInput.value === "" && !isUpdate) {
         errorMessages.push('No image file was selected to upload.');
     }
     // if no download upload
-    if(fileInput.value === "") {
+    if(fileInput.value === "" && !isUpdate) {
         errorMessages.push('No download file was selected to upload.');
     }
     // if no errors then submit

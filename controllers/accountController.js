@@ -100,8 +100,8 @@ accountController.putPasswordChange = (req, res) => {
     req.checkBody('email', 'Invalid email.').notEmpty().isEmail();
     req.checkBody('newPassword', 'Invalid new password.').notEmpty();
     req.checkBody('newPassword', 'New password needs to be greater than 5 letters.').isLength({min: 5});
-    // req.checkBody('newPassword', 'New password must contain a number.').matches(/\d/);
-    // req.checkBody('newPassword', 'New password must contain a capitalized letter.').matches(/[A-Z]/);
+    req.checkBody('newPassword', 'New password must contain a number.').matches(/\d/);
+    req.checkBody('newPassword', 'New password must contain a capitalized letter.').matches(/[A-Z]/);
     req.checkBody('newPasswordConfirmation', 'New passwords do not match.')
         .custom((value) => value === req.body.newPassword);
     // throw errors if any
