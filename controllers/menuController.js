@@ -18,7 +18,7 @@ menuController.getHomePage = async (req, res, next) => {
     try {
         const [ profile, items ] = await Promise.all([
             Profile.findOne({user: req.user}).lean().exec(),
-            Product.find({}).lean().exec()
+            Product.find({}).sort({order: 1}).lean().exec()
         ]);
         // store flash error and success in variables
         const messages = req.flash('error');

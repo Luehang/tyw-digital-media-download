@@ -38,7 +38,7 @@ var addProductForm = document.getElementById('add-product-form');
 var addProductFormSubmitButton = document.querySelector('#add-product-form .button');
 var addProductFormTitle = document.getElementById('add-product-title');
 var addProductFormPrice = document.getElementById('add-product-price');
-var addProductFormAvailable = document.getElementById('add-product-available');
+var addProductFormOrder = document.getElementById('add-product-order');
 
 // Function to check if it is USD currency format Ex. "99.90"
 function isCurrency(number) {
@@ -60,6 +60,11 @@ addProductFormSubmitButton.addEventListener('click', function(event) {
     // if not currency
     if (!isCurrency(addProductFormPrice.value)) {
         errorMessages.push('Product price needs to be formatted in USD currency. Ex. 99.90');
+    }
+    // if item order not integer
+    if (!(/^[0-9]+$/).test(addProductFormOrder.value) 
+        || addProductFormOrder.value !== "") {
+            errorMessages.push('Item order has to be an integer.');
     }
     // if no image upload
     if(imageInput.value === "" && !isUpdate) {

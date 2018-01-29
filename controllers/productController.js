@@ -139,16 +139,23 @@ productController.postProductUploadMiddleware = (req, res, next) => {
             return res.end();
         }
         req.session.csrfToken = null;
+        const { title, description, price, order } = req.body;
         const isUpdate = req.body.isUpdate === "true" ? true : false;
         // if no title
-        if (req.body.title === "") {
+        if (title === "") {
             req.flash('error', 'Need to add a product title.');
             return res.redirect('/user/account/add-product');
         }
         // if not currency
-        if (!isCurrency(req.body.price)) {
+        if (!isCurrency(price)) {
             req.flash('error', 'Product price needs to be formatted in USD currency. Ex. 99.90');
             return res.redirect('/user/account/add-product');
+        }
+        // if item order not integer
+        if (!(/^[0-9]+$/).test(order) 
+            || order !== "") {
+                req.flash('error', 'Item order has to be an integer.');
+                return res.redirect('/user/account/add-product');
         }
         if (err) {
             console.log(err);
@@ -204,13 +211,14 @@ productController.postProductUploadMiddleware = (req, res, next) => {
  * then save information and redirect to user product page.
  */
 productController.postProductUpload = async (req, res) => {
-    const { title, description, price } = req.body;
+    const { title, description, price, order } = req.body;
     // create product model
     const product = new Product({
         _user: req.user,
         title,
         description,
-        price
+        price,
+        order
     });
     // if any image upload errors
     if (req.session.error) {
@@ -300,7 +308,7 @@ productController.getUpdateProductForm = (req, res) => {
  * upload new image if any.
  */
 productController.putUpdateProductUpload = async (req, res, next) => {
-    const { title, description, price } = req.body;
+    const { title, description, price, order } = req.body;
     const productID = req.params.id;
     // if any image upload errors
     if (req.session.error) {
@@ -309,7 +317,8 @@ productController.putUpdateProductUpload = async (req, res, next) => {
             _user: req.user,
             title,
             description,
-            price
+            price,
+            order
         });
         // store session error
         req.flash('error', req.session.error);
@@ -335,6 +344,7 @@ productController.putUpdateProductUpload = async (req, res, next) => {
             title: title,
             description: description,
             price: price,
+            order: order,
             updated_at: new Date()
         }}, {upsert: true});
         // create download model
@@ -571,7 +581,7 @@ productController.getQueryProduct = (view, title, limit, maxLimit, queryParam) =
             // narrow down search in db and find total counts
             const [ results, itemCount ] = await Promise.all([
                 Product.find(query)
-                    .sort({created_at: -1})
+                    .sort({order: 1})
                     .limit(req.query.limit)
                     .skip(Number.parseInt(req.query.skip) || req.skip)
                     .lean()
@@ -583,12 +593,12 @@ productController.getQueryProduct = (view, title, limit, maxLimit, queryParam) =
             // set up prev url
             const docBefore = req.query.limit * (req.query.page - 2);
             const hasPerviousPagesUrl = req.query.page > 1 ?
-                `/search-product?search=${searchVal}&skip=${docBefore}&page=${req.query.page - 1}` 
+                `/user/products?search=${searchVal}&skip=${docBefore}&page=${req.query.page - 1}` 
                 : null;   
             // set up next url
             const docNow = req.query.limit * req.query.page;
             const hasNextPagesUrl = pageCount > req.query.page ? 
-                `/search-product?search=${searchVal}&skip=${docNow}&page=${req.query.page + 1}` 
+                `/user/products?search=${searchVal}&skip=${docNow}&page=${req.query.page + 1}` 
                 : null;
             // set up to reorganize data into groups
             const products = results;

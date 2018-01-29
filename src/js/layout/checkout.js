@@ -1,7 +1,11 @@
+const $PAYPAL_SANDBOX_KEY = $('#PAYPAL_SANDBOX_KEY').val();
+const $PAYPAL_PRODUCTION_KEY = $('#PAYPAL_PRODUCTION_KEY').val();
+const $STRIPE_PUB_KEY = $('#STRIPE_PUB_KEY').val();
+const $APP_URL = $('#APP_URL').val();
 // Set your publishable key: remember to change this to your live publishable key in production
 // See your keys here: https://dashboard.stripe.com/account/apikeys
-Stripe.setPublishableKey('pk_test_AhDwyxYOzXzwi6Nbo7fQrZXY');
-  
+Stripe.setPublishableKey($STRIPE_PUB_KEY);
+
 const $number = $('#card-number');
 const $numberRow = $('#card-number-row');
 const $cvc = $('#card-cvc');
@@ -91,39 +95,38 @@ function fixStepIndicator(n) {
 /**
  * PAY WITH PAYPAL
  */
+const CREATE_PAYMENT_URL  = `${$APP_URL}/paypal/create-payment`;
+const EXECUTE_PAYMENT_URL = `${$APP_URL}/paypal/execute-payment`;
 paypal.Button.render({
     // Set environment
     env: 'sandbox', // 'sandbox' or 'production'
     // PayPal Client IDs - replace with your own
     // Create a PayPal app: https://developer.paypal.com/developer/applications/create
     client: {
-        sandbox:    'AYT7sl3IntKyUbd2kEc4KKOVzeIKRuKUUAEhqhfFfTYXghU05iP6rmYbSD0HpS0cvF7hSAJdmi0gDEPy',
-        production: '<insert production client id>'
+        sandbox: $PAYPAL_SANDBOX_KEY,
+        production: $PAYPAL_PRODUCTION_KEY
     },
     commit: true, // Show a 'Pay Now' button
     // Specify the style of the button
     style: {
         label: 'paypal',
         size:  'responsive',    // small | medium | large | responsive
-        shape: 'rect',     // pill | rect
-        color: 'gold',     // gold | blue | silver | black
+        shape: 'rect',          // pill | rect
+        color: 'gold',          // gold | blue | silver | black
         tagline: false    
     },
     // payment() is called when the button is clicked
     payment: function(data, actions) {
-        validateOnButtonClick();
         // Make a call to the REST api to create the payment
-        if (pass) {
-            return actions.payment.create({
-                payment: {
-                    transactions: [
-                        {
-                            amount: { total: $priceTag, currency: 'USD' }
-                        }
-                    ]
-                }
-            });
-        }
+        return actions.payment.create({
+            payment: {
+                transactions: [
+                    {
+                        amount: { total: $priceTag, currency: 'USD' }
+                    }
+                ]
+            }
+        });
     },
     // onAuthorize() is called when the buyer approves the payment
     onAuthorize: function(data, actions) {

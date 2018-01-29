@@ -35,7 +35,8 @@ checkoutController.getIndividualProductCheckOut = (req, res) => {
                 title: 'Buy Now Check Out',
                 messages: messages, 
                 hasErrors: messages.length > 0,
-                product: product
+                product: product,
+                STRIPE_PUB_KEY: process.env.STRIPE_PUB_KEY
             });
         });
 }
@@ -105,7 +106,7 @@ checkoutController.postIndividualProductCheckOut = async (req, res, next) => {
                     <tbody>
                     <tr style="padding:0; vertical-align:top; text-align:center">
                     <td style="word-break:break-word; padding:0px 0px 10px; vertical-align:top; text-align:center; color:#333333; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight:normal; margin:0; line-height:20px; font-size:14px; border-collapse:collapse!important">
-                    <div class="x_mark" style="text-align:center"><a href="${process.env.APP_URL}" target="_blank" style="text-align:center; color:#4183C4; text-decoration:none"><div style="display: inline-block; max-width: 99.9%;"><img src="https://tywmedia.worldsecuresystems.com/TYW-Digital-Media-NEW-CIRCLE-logo-720x480.jpg" alt="${process.env.APP_NAME}, Inc." width="102" height="28" class="x_center x_logo-wordmark" style="outline:none; text-decoration:none; width:auto; max-width:100%; border:none; margin:0 auto; float:none; padding:25px 0 17px; text-align:center"></div> </a></div>
+                    <div class="x_mark" style="text-align:center; padding:25px 0 17px;"><a href="${process.env.APP_URL}" target="_blank" style="text-align:center; color:#4183C4; text-decoration:none"><div style="display: inline-block; max-width: 99.9%;"><img src="${process.env.APP_URL}/favicon.ico" alt="${process.env.APP_NAME}, Inc." width="102" height="28" class="x_center x_logo-wordmark" style="outline:none; text-decoration:none; width:auto; max-width:100%; border:none; margin:0 auto; float:none; text-align:center"></div>   ${process.env.APP_NAME}</a></div>
                     </td>
                     <td class="x_expander" style="word-break:break-word; padding:0!important; vertical-align:top; text-align:center; color:#333333; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight:normal; margin:0; line-height:20px; font-size:14px; visibility:hidden; width:0px; border-collapse:collapse!important">
                     </td>
@@ -155,8 +156,8 @@ checkoutController.postIndividualProductCheckOut = async (req, res, next) => {
                     <div class="x_cta-button-wrap" style="padding:30px 0 20px; text-align:center; color:#ffffff">
                     <a href="${downloadUrl}" target="_blank" style="color:#ffffff; text-decoration:none; display:inline-block; text-align:center; background:#23b5f7; background-color:#23b5f7; border-radius:5px; -webkit-border-radius:5px; padding:12px 44px; font-weight:bold; letter-spacing:normal; font-size:17px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; margin:0 auto; width:auto!important">DOWNLOAD</a></div>
                     </div>
+                    </td>                  
                     </td>
-                    <div class="x_mark" style="text-align:center; padding:25px 0 17px;"><a href="${process.env.APP_URL}" target="_blank" style="text-align:center; color:#4183C4; text-decoration:none"><div style="display: inline-block; max-width: 99.9%;"><img src="${process.env.APP_URL}/favicon.ico" alt="${process.env.APP_NAME}, Inc." width="102" height="28" class="x_center x_logo-wordmark" style="outline:none; text-decoration:none; width:auto; max-width:100%; border:none; margin:0 auto; float:none; text-align:center"></div>   ${process.env.APP_NAME}</a></div>                    </td>
                     </tr>
                     </tbody>
                     </table>

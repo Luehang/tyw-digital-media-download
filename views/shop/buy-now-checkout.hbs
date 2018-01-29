@@ -8,6 +8,10 @@
         </div>
         <hr>
         <form id="checkout-form" class="form" action="/checkout/{{ product._id }}" method="POST">
+            <input type="hidden" id="PAYPAL_SANDBOX_KEY" value="{{ PAYPAL_SANDBOX_KEY }}" />
+            <input type="hidden" id="PAYPAL_PRODUCTION_KEY" value="{{ PAYPAL_PRODUCTION_KEY }}" />
+            <input type="hidden" id="STRIPE_PUB_KEY" value="{{ STRIPE_PUB_KEY }}" />
+            <input type="hidden" id="APP_URL" value="{{ APP_URL }}" />
             <div style="text-align:center; margin: 20px 0;">
                 <span class="step"></span>
                 <span class="step"></span>

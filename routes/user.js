@@ -42,7 +42,8 @@ router.get('/profile', isLoggedIn, userController.getProfilePage);
  *
  * Show user history page.
  */
-router.get('/orderhistory', isLoggedIn, userController.getOrderHistoryPage);
+router.get('/orderhistory', isLoggedIn, 
+    userController.getQueryOrder('user/orderhistory', 'Customer Orders', 10, 15));
 
 /**
  * GET /user/update-profile

@@ -58,10 +58,6 @@ Perform steps 1-4:
 
     ![](doc/source/images/dev-logger.png)
 
-  * Navigate into ``public/src/js/layout/checkout.js`` and look above the javascript file.  You should see Stripe's "**setPublishableKey**."  Enter in your **publishable test or production (live) key** here...
-
-    ![](doc/source/images/stripe-publishable-key-code.png)
-
   * Modify ``env.example``'s name to ``.env`` and populate the service
   credentials as you create/retrieve the credentials:
 
@@ -70,9 +66,16 @@ Perform steps 1-4:
     APP_NAME=<put business name here>
     APP_URL=<put website url here>
 
-    # Set your Stripe's Secret API TEST or PRODUCTION (LIVE) Key
+    # PayPal Client IDs - replace with your own
+    # Create a PayPal app: https://developer.paypal.com/developer/applications/create
+    PAYPAL_SANDBOX_KEY=<insert sandbox client id>
+    PAYPAL_PRODUCTION_KEY=<insert production client id>
+
+    # Set your Stripe's Secret AND Publishable API Key: 
+    # remember to change this to your live secret and publishable key in production
     # See your keys here: https://dashboard.stripe.com/account/apikeys
-    STRIPE_SECRET_KEY=<put Stripe's Secret Test OR Live Key here>
+    STRIPE_SECRET_KEY=<put Stripe's Secret Key here>
+    STRIPE_PUB_KEY=<put Stripe's Publishable Key here>
 
     # SendGrid Environments at https://www.sendgrid.com
     SENDGRID_API_KEY=<put Secret API Key here>

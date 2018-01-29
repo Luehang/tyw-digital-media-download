@@ -1,4 +1,4 @@
-<div class="primary-container">
+<div class="primary-container clearfix">
     <h1>{{ this.title }}</h1>
 
     {{#each products }}
@@ -6,7 +6,8 @@
             {{#each this }}
                 <div class="thumbnail  clearfix">
                     <div class="caption pull-right">
-                        <a href="/products/{{ this._id }}"><h3>{{ this.title }}</h3></a>
+                        <h2 style="margin: 0;"></h2>
+                        <a href="/products/{{ this._id }}"><h3>{{ this.order }}: {{ this.title }}</h3></a>
                         <p class="inner-text">Created at: {{ this.created_at }}</p>
                         <p class="inner-text">Description: {{ this.description }}</p>
                         <p class="inner-text">Total Downloads: {{ this.download }}</p>

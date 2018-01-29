@@ -104,8 +104,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(function(req, res, next) {
   // middleware authenticate user and store in locals
   res.locals.login = req.isAuthenticated();
-  res.locals.appName = process.env.APP_NAME;
-  res.locals.googleTrackingID = process.env.GOOGLE_TRACKING_ID;
+  res.locals.APP_NAME = process.env.APP_NAME;
+  res.locals.APP_URL = process.env.APP_URL;
+  res.locals.PAYPAL_SANDBOX_KEY = process.env.PAYPAL_SANDBOX_KEY;
+  res.locals.PAYPAL_PRODUCTION_KEY = process.env.PAYPAL_PRODUCTION_KEY;
+  res.locals.STRIPE_PUB_KEY = process.env.STRIPE_PUB_KEY;
+  res.locals.GOOGLE_TRACKING_ID = process.env.GOOGLE_TRACKING_ID;
   // store session in local session
   res.locals.session = req.session;
   next();

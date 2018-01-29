@@ -15,27 +15,102 @@ const userController = {};
 /**
  * GET /user/orderhistory
  *
- * Show user history page.
+ * Replace package "express-paginate."
+ * Query customer history and display results with pagination.
  */
-userController.getOrderHistoryPage = (req, res) => {
-    // find order data
-    Order.find({})
-        .populate({
-            path: '_product',
-            select: 'title image_path'
-        })
-        .sort({purchase_date: -1})
-        .limit(50)
-        .exec((err, orders) => {
-            // if database error
-            if (err) {
-                console.log(err);
+userController.getQueryOrder = (view, title, limit, maxLimit, queryParam) => {
+    var _limit = (typeof limit === 'number') ? parseInt(limit, 10) : 10;
+    var _maxLimit = (typeof maxLimit === 'number') ? parseInt(maxLimit, 10) : 50;
+    
+    return async function _getQueryProduct(req, res, next) { 
+        req.query.page = (typeof req.query.page === 'string') ? parseInt(req.query.page, 10) || 1 : 1;
+        req.query.limit = (typeof req.query.limit === 'string') ? parseInt(req.query.limit, 10) || 0 : _limit;
+        
+        if (req.query.limit > _maxLimit)
+                req.query.limit = _maxLimit;
+
+        if (req.query.page < 1)
+            req.query.page = 1;
+
+        if (req.query.limit < 0)
+            req.query.limit = 0;
+
+            req.skip = req.offset = (req.query.page * req.query.limit) - req.query.limit;
+
+            res.locals.paginate = {};
+            res.locals.paginate.page = req.query.page;
+            res.locals.paginate.limit = req.query.limit;
+     
+        try {
+            // query data
+            let query = {};
+            let searchVal = "";
+            if (typeof queryParam === 'string' || req.query.search) {
+                if (req.query.search) {
+                    queryParam = req.query.search;
+                }
+                if (queryParam === "") {
+                    query = {};
+                } else {
+                    const regexSearch = new RegExp(`^${queryParam}`, "i");
+                    query = {title: regexSearch};
+                }
+                searchVal = queryParam;
             }
-            // render order history
-            res.render('user/orderhistory', { 
-                orders: orders 
+            if (req.user) {
+                if (req.query.search === req.user._id) {
+                    query = {_user: req.user};
+                }
+                if ((/^user/i).test(queryParam)) {
+                    query = {_user: req.user};
+                }
+            }
+            // narrow down search in db and find total counts
+            const [ results, itemCount ] = await Promise.all([
+                Order.find(query)
+                    .sort({purchase_date: 1})
+                    .limit(req.query.limit)
+                    .skip(Number.parseInt(req.query.skip) || req.skip)
+                    .populate({
+                        path: '_product',
+                        select: 'title image_path'
+                    })
+                    .lean()
+                    .exec(),
+                Order.count(query)
+            ]);
+            const pageCount = Math.ceil(itemCount / req.query.limit);
+            
+            // set up prev url
+            const docBefore = req.query.limit * (req.query.page - 2);
+            const hasPerviousPagesUrl = req.query.page > 1 ?
+                `/user/orderhistory?search=${searchVal}&skip=${docBefore}&page=${req.query.page - 1}` 
+                : null;   
+            // set up next url
+            const docNow = req.query.limit * req.query.page;
+            const hasNextPagesUrl = pageCount > req.query.page ? 
+                `/user/orderhistory?search=${searchVal}&skip=${docNow}&page=${req.query.page + 1}` 
+                : null;
+            // store flash message in variables
+            const successMsg = req.flash('success');
+            const errorMessages = req.flash('error');
+            // render view products
+            res.status(200).render(view, {
+                title: title,
+                orders: results,
+                pagination: req.query.page > 1 || pageCount > req.query.page,
+                hasNextPagesUrl,
+                hasPerviousPagesUrl,
+                pageNumber: req.query.page,
+                successMsg: successMsg,
+                hasSuccess: successMsg.length > 0,
+                messages: errorMessages, 
+                hasErrors: errorMessages.length > 0
             });
-        });
+        } catch (err) {
+            next(err);
+        }
+    }
 }
 
 /**

@@ -9,7 +9,7 @@
             {{/if}}
                 method="POST" enctype="multipart/form-data">
             <fieldset>
-                <input type="hidden" name="isUpdate" value="{{update}}" />
+                <input type="hidden" name="isUpdate" value="{{ update }}" />
                 <input type="hidden" name="csrfToken" value="{{ csrfToken }}">
                 <h3>Product</h3>
                 <hr>
@@ -21,6 +21,9 @@
                 </div>
                 <div label="* Price" class="row">
                     <input type="text" id="add-product-price" value="{{product.price}}" placeholder="9.99"  name="price" maxlength="10">
+                </div>
+                <div label="* Item Order" class="row">
+                    <input type="text" id="add-product-order" value="{{product.order}}" name="order" maxlength="3">
                 </div>
                 <div label="Selected Image:" class="row">
                     <input id="image-return" type="text" value="{{product.image_path}}" disabled/>
