@@ -6,7 +6,8 @@ mongoose.Promise            = require('bluebird');
 const productSchema = new Schema({
     _user: {type: Schema.Types.ObjectId, ref: 'User'},
     title: {type: String, required: true},
-    image_path: {type: String, default: "/img/no-image.jpg"},
+    video_url: {type: String, default: null},
+    image_path: {type: String, default: '/img/no-image.jpg'},
     download_path: {type: String},
     description: {type: String, default: 'No description available.'},
     price: {type: Number, required: true},

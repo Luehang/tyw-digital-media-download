@@ -918,8 +918,6 @@ nav {
     nav a:hover {
       cursor: pointer;
       color: #1abc9c; }
-    nav a:active {
-      background-color: #343538; }
   nav .login-text {
     font-family: "Oxygen", "Arial Rounded MT Bold", "Segoe UI";
     color: #f3f3f3; }
@@ -984,7 +982,7 @@ nav {
         -webkit-border-radius: 0 0 5px 5px;
         -moz-border-radius: 0 0 5px 5px; }
       nav ul.social-list ul li:active {
-        background-color: rgba(52, 53, 56, 0.8); }
+        background-color: rgba(52, 53, 56, 0.5); }
     nav ul.menu-list li ul li {
       display: none; }
     nav ul.social-list li ul li {
@@ -1054,6 +1052,8 @@ nav {
   nav a {
     display: block;
     padding: 10px 5%; }
+    nav a:active {
+      background-color: rgba(52, 53, 56, 0.5); }
   nav .nav-title a {
     padding: 0; }
   nav .social-list .login-text {
@@ -1759,11 +1759,20 @@ button:disabled {
   overflow: hidden;
   color: white; }
 
+.video-responsive iframe {
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  background-color: black; }
+
 .hero-image {
   z-index: 3;
   position: relative;
   width: 100%;
   height: 100%;
+  overflow: hidden;
   background-size: cover;
   box-shadow: 0 5px 60px 10px rgba(0, 0, 0, 0.75);
   transition: all 0.5s ease; }

@@ -39,6 +39,7 @@ var addProductFormSubmitButton = document.querySelector('#add-product-form .butt
 var addProductFormTitle = document.getElementById('add-product-title');
 var addProductFormPrice = document.getElementById('add-product-price');
 var addProductFormOrder = document.getElementById('add-product-order');
+var addProductFormVideoUrl = document.getElementById('add-product-video-url');
 
 // Function to check if it is USD currency format Ex. "99.90"
 function isCurrency(number) {
@@ -48,7 +49,18 @@ function isCurrency(number) {
     return false;
 }
 
-// // add product form submit event
+// Function to check if url
+function isURL(str) {
+    var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|'+ // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+    return pattern.test(str);
+}
+
+// add product form submit event
 addProductFormSubmitButton.addEventListener('click', function(event) {
     const isUpdate = $('#add-product-form').find('.button').html().toLowerCase() === 'update';
     var errorMessages = [];
@@ -63,15 +75,26 @@ addProductFormSubmitButton.addEventListener('click', function(event) {
     }
     // if item order not integer
     if (!(/^[0-9]+$/).test(addProductFormOrder.value) 
-        || addProductFormOrder.value !== "") {
+        && addProductFormOrder.value !== "") {
             errorMessages.push('Item order has to be an integer.');
     }
-    // if no image upload
-    if(imageInput.value === "" && !isUpdate) {
+    // // if no video url and image upload
+    // if (addProductFormVideoUrl.value === "" && imageInput.value === "" && !isUpdate) {
+    //     errorMessages.push('No video url or image file was selected to upload.');
+    // }
+    if (imageInput.value === "" && !isUpdate) {
         errorMessages.push('No image file was selected to upload.');
     }
+    // if invalid video url
+    if (!isURL(addProductFormVideoUrl.value) && addProductFormVideoUrl.value !== "") {
+        errorMessages.push('Invalid video url.');
+    }
+    if (/\W/.test(addProductFormVideoUrl.value.split("").pop() && addProductFormVideoUrl.value !== "")
+        && addProductFormVideoUrl.value !== "") {
+        errorMessages.push('Can not have a non-word character at the end of video url.');
+    }
     // if no download upload
-    if(fileInput.value === "" && !isUpdate) {
+    if (fileInput.value === "" && !isUpdate) {
         errorMessages.push('No download file was selected to upload.');
     }
     // if no errors then submit

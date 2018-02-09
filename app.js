@@ -104,6 +104,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(function(req, res, next) {
   // middleware authenticate user and store in locals
   res.locals.login = req.isAuthenticated();
+  // store environments in express locals
   res.locals.APP_NAME = process.env.APP_NAME;
   res.locals.APP_URL = process.env.APP_URL;
   res.locals.PAYPAL_SANDBOX_KEY = process.env.PAYPAL_SANDBOX_KEY;

@@ -111,4 +111,23 @@ functionController.randomString = (num) => {
     return string;
 }
 
+/**
+ * Function to parse given url and add query strings for settings.
+ *
+ */
+functionController.queryUrl = (url) => {
+    // if youtube url
+    if (/youtube/i.test(url)) {
+        const videoID = url.split("/").pop();
+        const youtubeUrl = `${url}?autoplay=1&showinfo=0&mute=1` +
+            `&controls=0&disablekb=1&iv_load_policy=1&modestbranding=0` +
+            `&enablejsapi=1&origin=${process.env.APP_URL}&loop=1&playlist=${videoID}`;
+        return youtubeUrl;
+    // if vimeo url
+    } else if (/vimeo/i.test(url)) {
+        const vimeoUrl = `${url}?autoplay=1&background=1&loop=1&quality=1080p`;
+        return vimeoUrl;
+    }
+}
+
 module.exports = functionController;

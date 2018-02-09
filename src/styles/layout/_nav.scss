@@ -30,9 +30,6 @@ nav {
             cursor: pointer;
             color: $primary-color;
         }
-        &:active {
-            background-color: rgb(52, 53, 56);
-        }
     }
     .login-text {
         font-family: $font-stack-secondary;
@@ -121,7 +118,7 @@ nav {
                     -moz-border-radius: 0 0 5px 5px;
                 }
                 &:active {
-                    background-color: rgba(52, 53, 56, 0.8);
+                    background-color: rgba(52, 53, 56, 0.5);
                 }
             }
         }
@@ -222,6 +219,9 @@ nav {
         a {
             display: block;
             padding: 10px 5%;
+            &:active {
+                background-color: rgba(52, 53, 56, 0.5);
+            }
         }
         .nav-title a {
             padding: 0;

@@ -134,6 +134,12 @@ paypal.Button.render({
         return actions.payment.execute().then(function() {
             $form.submit();
         });
+    },
+    // An error occurred during the transaction 
+    onError: function(err) {
+        // print error on pop up
+        $alert.html(`<p style="color: red;">* ${err}</p>`);
+        $annotation.css('display', 'block');       
     }
 }, '#paypal-button');
 
@@ -202,7 +208,7 @@ $(document).ready(function() {
 
     function stripeResponseHandler(status, response) {
         if (response.error) { // Problem!
-            // Show the errors on the form
+            // Show the errors
             $alert.html(`<p style="color: red;">* ${response.error.message}</p>`);
             $annotation.css('display', 'block');
             $form.find('#submit-button').prop('disabled', false); // Re-enable submission

@@ -1,8 +1,16 @@
+<style>
+    
+</style>
+
 <div class='main-wrapper'>
   
     {{#each mainProduct }}
-    <div class='hero-image'>
-        <img class="main-image" src="{{this.image_path}}"/>
+    <div class='hero-image video-responsive'>
+        {{#if this.video_url }}
+            <iframe class="video-player" src="{{this.video_url}}" frameborder="0" allow="autoplay; encrypted-media" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+        {{else }}
+            <img class="main-image" src="{{this.image_path}}"/>
+        {{/if }}
         <div class='hero-content'>
         <div class='hc-label'>{{this.title}}</div>
         <div class='hc-desc'>{{this.description}}</div>

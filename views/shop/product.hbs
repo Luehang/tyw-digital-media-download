@@ -7,7 +7,11 @@
             <div class="left">
                 <h1>{{ product.title }}</h1>
                 <h2>Download</h2>
-                <img src="{{ product.image_path }}" alt="...">
+                {{#if product.video_url }}
+                    <iframe id="video-player" class="video-player" src="{{product.video_url}}" frameborder="0" allow="autoplay; encrypted-media" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                {{else }}
+                    <img class="main-image" src="{{product.image_path}}"/>
+                {{/if }}
             </div>
             <div class="right">
                 <p>{{ product.description }}</p>

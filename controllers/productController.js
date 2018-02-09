@@ -17,6 +17,7 @@ const functionController    = require('./functionController');
 const nearestHundredths     = functionController.nearestHundredths;
 const isCurrency            = functionController.isCurrency;
 const randomString          = functionController.randomString;
+const queryUrl              = functionController.queryUrl;
 
 const productController = {};
 
@@ -139,7 +140,7 @@ productController.postProductUploadMiddleware = (req, res, next) => {
             return res.end();
         }
         req.session.csrfToken = null;
-        const { title, description, price, order } = req.body;
+        const { title, description, price, order, video_url } = req.body;
         const isUpdate = req.body.isUpdate === "true" ? true : false;
         // if no title
         if (title === "") {
@@ -152,8 +153,7 @@ productController.postProductUploadMiddleware = (req, res, next) => {
             return res.redirect('/user/account/add-product');
         }
         // if item order not integer
-        if (!(/^[0-9]+$/).test(order) 
-            || order !== "") {
+        if (!(/^[0-9]+$/).test(order) && order !== "") {
                 req.flash('error', 'Item order has to be an integer.');
                 return res.redirect('/user/account/add-product');
         }
@@ -164,8 +164,8 @@ productController.postProductUploadMiddleware = (req, res, next) => {
         } else {
             // if update has only download upload
             if(req.files.imageFile === undefined && 
-               req.files.downloadFile !== undefined
-               && isUpdate) {
+                req.files.downloadFile !== undefined 
+                && isUpdate) {
                     req.session.imageUpload = false;
                     req.session.downloadUpload = true;
                     return next();
@@ -195,10 +195,7 @@ productController.postProductUploadMiddleware = (req, res, next) => {
                     return next();
             }
             // if adding product with no errors
-            if(req.files.imageFile !== undefined && 
-               req.files.downloadFile !== undefined) {
-                return next();
-            }
+            return next();
         }
     });
 }
@@ -211,7 +208,7 @@ productController.postProductUploadMiddleware = (req, res, next) => {
  * then save information and redirect to user product page.
  */
 productController.postProductUpload = async (req, res) => {
-    const { title, description, price, order } = req.body;
+    const { title, description, price, order, video_url } = req.body;
     // create product model
     const product = new Product({
         _user: req.user,
@@ -235,22 +232,30 @@ productController.postProductUpload = async (req, res) => {
     }
 
     try {
-        const imageFile = req.files.imageFile[0];
+        const updateVideoUrl = await Promise.all([
+            queryUrl(video_url)
+        ]);
         const downloadFile = req.files.downloadFile[0];
-        // save image and download path to product model
-        product.image_path = `/uploads/${imageFile.filename}`;
+        // add download path to product model
         product.download_path = `/uploads/${downloadFile.filename}`;
+        product.video_url = updateVideoUrl;
         // create download model
-        const image = new Download({
-            _user: req.user._id,
-            originalname: imageFile.originalname,
-            encoding: imageFile.encoding,
-            mimetype: imageFile.mimetype,
-            destination: imageFile.destination,
-            filename: imageFile.filename,
-            path: `/uploads/${imageFile.filename}`,
-            size: imageFile.size
-        });
+        const image = new Download();
+        // if there is image file upload
+        if (req.files.imageFile) {
+            const imageFile = req.files.imageFile[0];
+            // add image path to product model
+            product.image_path = `/uploads/${imageFile.filename}`;
+            // add image details to image download model
+            image._user = req.user._id;
+            image.originalname = imageFile.originalname;
+            image.encoding = imageFile.encoding;
+            image.mimetype = imageFile.mimetype;
+            image.destination = imageFile.destination;
+            image.filename = imageFile.filename;
+            image.path = `/uploads/${imageFile.filename}`;
+            image.size = imageFile.size;
+        }
         const download = new Download({
             _user: req.user._id,
             originalname: downloadFile.originalname,
@@ -269,7 +274,7 @@ productController.postProductUpload = async (req, res) => {
         await download.save();
         req.flash('success', 'Product added successfully.');
         // redirect to account product page
-        return res.status(201).redirect('/user/products');
+        res.status(201).redirect('/user/products');
     } catch (err) {
         console.log(err);
         next();
@@ -291,6 +296,9 @@ productController.getUpdateProductForm = (req, res) => {
         if (err) {
             return res.redirect(req.url);
         }
+        if (product.video_url) {
+            product.video_url = product.video_url.split("?").shift();
+        }
         // render update product form
         res.status(200).render('user/add-product', {
             title: 'Update Product',
@@ -308,7 +316,7 @@ productController.getUpdateProductForm = (req, res) => {
  * upload new image if any.
  */
 productController.putUpdateProductUpload = async (req, res, next) => {
-    const { title, description, price, order } = req.body;
+    const { title, description, price, order, video_url } = req.body;
     const productID = req.params.id;
     // if any image upload errors
     if (req.session.error) {
@@ -333,46 +341,44 @@ productController.putUpdateProductUpload = async (req, res, next) => {
         });
     }
     try {
-        let imageFile = {};
-        let downloadFile = {};
-        let image;
-        let download;
-        const product = await Promise.all([
-            Product.findOne({_id: productID}).lean().exec()
+        let imageFile;
+        let downloadFile;
+        const image = new Download();
+        const download = new Download();
+        const [oldProduct, updateVideoUrl] = await Promise.all([
+            Product.findOne({_id: productID}).lean().exec(),
+            queryUrl(video_url)
         ]);
         await Product.update({_id: productID}, { $set: {
             title: title,
             description: description,
             price: price,
             order: order,
+            video_url: updateVideoUrl,
             updated_at: new Date()
         }}, {upsert: true});
         // create download model
         if (req.session.imageUpload) {
             imageFile = req.files.imageFile[0];
-            image = new Download({
-                _user: req.user._id,
-                originalname: imageFile.originalname,
-                encoding: imageFile.encoding,
-                mimetype: imageFile.mimetype,
-                destination: imageFile.destination,
-                filename: imageFile.filename,
-                path: `/uploads/${imageFile.filename}`,
-                size: imageFile.size
-            });
+            image._user = req.user._id;
+            image.originalname = imageFile.originalname;
+            image.encoding = imageFile.encoding;
+            image.mimetype = imageFile.mimetype;
+            image.destination = imageFile.destination;
+            image.filename = imageFile.filename;
+            image.path = `/uploads/${imageFile.filename}`;
+            image.size = imageFile.size;
         }
         if (req.session.downloadUpload) {
             downloadFile = req.files.downloadFile[0];
-            download = new Download({
-                _user: req.user._id,
-                originalname: downloadFile.originalname,
-                encoding: downloadFile.encoding,
-                mimetype: downloadFile.mimetype,
-                destination: downloadFile.destination,
-                filename: downloadFile.filename,
-                path: `/uploads/${downloadFile.filename}`,
-                size: downloadFile.size
-            });
+            download._user = req.user._id;
+            download.originalname = downloadFile.originalname;
+            download.encoding = downloadFile.encoding;
+            download.mimetype = downloadFile.mimetype;
+            download.destination = downloadFile.destination;
+            download.filename = downloadFile.filename;
+            download.path = `/uploads/${downloadFile.filename}`;
+            download.size = downloadFile.size;
         }
         // if update has only image upload
         if (req.session.imageUpload && !req.session.downloadUpload) {
@@ -381,15 +387,15 @@ productController.putUpdateProductUpload = async (req, res, next) => {
                 image_path: `/uploads/${imageFile.filename}`
             }}, {upsert: true});
             // check if image exists 
-            await fs.stat(`${__dirname}/../public${product[0].image_path}`, (err, stats) => {
+            await fs.stat(`${__dirname}/../public${oldProduct[0].image_path}`, (err, stats) => {
                 if (err) return console.error(err);
                 // deletes image
-                fs.unlink(`${__dirname}/../public${product[0].image_path}`, (err) => {
+                fs.unlink(`${__dirname}/../public${oldProduct[0].image_path}`, (err) => {
                     if(err) return console.log(err);
                 });  
             });
             // remove previous image data
-            await Download.remove({path: product[0].image_path});
+            await Download.remove({path: oldProduct[0].image_path});
             // save new image data
             await image.save();
         }
@@ -400,15 +406,15 @@ productController.putUpdateProductUpload = async (req, res, next) => {
                 download_path: `/uploads/${downloadFile.filename}`
             }}, {upsert: true}, async (err, doc) => {
                 // check if download exists 
-                await fs.stat(`${__dirname}/../public${product[0].download_path}`, (err, stats) => {
+                await fs.stat(`${__dirname}/../public${oldProduct[0].download_path}`, (err, stats) => {
                     if (err) return console.error(err);
                     // deletes download
-                    fs.unlink(`${__dirname}/../public${product[0].download_path}`, (err) => {
+                    fs.unlink(`${__dirname}/../public${oldProduct[0].download_path}`, (err) => {
                         if(err) return console.log(err);
                     });  
                 });
                 // remove previous download data
-                await Download.remove({path: product[0].download_path});
+                await Download.remove({path: oldProduct[0].download_path});
                 // save new download data
                 await download.save();
             });
@@ -421,24 +427,24 @@ productController.putUpdateProductUpload = async (req, res, next) => {
                 download_path: `/uploads/${downloadFile.filename}`
             }}, {upsert: true}, async (err, doc) => {
                 // check if image exists 
-                await fs.stat(`${__dirname}/../public${product[0].image_path}`, (err, stats) => {
+                await fs.stat(`${__dirname}/../public${oldProduct[0].image_path}`, (err, stats) => {
                     if (err) return console.error(err);
                     // deletes image
-                    fs.unlink(`${__dirname}/../public${product[0].image_path}`, (err) => {
+                    fs.unlink(`${__dirname}/../public${oldProduct[0].image_path}`, (err) => {
                         if(err) return console.log(err);
                     });  
                 });
                 // check if download exists 
-                await fs.stat(`${__dirname}/../public${product[0].download_path}`, (err, stats) => {
+                await fs.stat(`${__dirname}/../public${oldProduct[0].download_path}`, (err, stats) => {
                     if (err) return console.error(err);
                     // deletes download
-                    fs.unlink(`${__dirname}/../public${product[0].download_path}`, (err) => {
+                    fs.unlink(`${__dirname}/../public${oldProduct[0].download_path}`, (err) => {
                         if(err) return console.log(err);
                     });  
                 });
                 // remove previous data and save new
-                await Download.remove({path: product[0].image_path});
-                await Download.remove({path: product[0].download_path});
+                await Download.remove({path: oldProduct[0].image_path});
+                await Download.remove({path: oldProduct[0].download_path});
                 await image.save();
                 await download.save();
             });

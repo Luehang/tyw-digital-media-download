@@ -25,7 +25,10 @@
                 <div label="* Item Order" class="row">
                     <input type="text" id="add-product-order" value="{{product.order}}" name="order" maxlength="3">
                 </div>
-                <div label="Selected Image:" class="row">
+                <div label="Video Url:" class="row">
+                    <input type="text" id="add-product-video-url" value="{{product.video_url}}" name="video_url" maxlength="75">
+                </div>
+                <div label="* Selected Image:" class="row">
                     <input id="image-return" type="text" value="{{product.image_path}}" disabled/>
                 </div>
                 <div class="input-file-container">  
@@ -33,7 +36,7 @@
                     <label tabindex="0" for="my-image" class="input-image-trigger">Select a Image</label>
                     <p style="margin: 0 0 10px; font-size: 10px;">recommend 500 KB</p>
                 </div>
-                <div label="Selected File:" class="row">
+                <div label="* Selected File:" class="row">
                     <input id="file-return" type="text" value="{{product.download_path}}" disabled/>
                 </div>
                 <div class="input-file-container">  

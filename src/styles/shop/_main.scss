@@ -30,11 +30,27 @@ $hero-speed: .5s;
     overflow: hidden;
     color: white;
 }
+// .video-responsive{
+//     overflow:hidden;
+//     padding-bottom:56.25%;
+//     position:relative;
+//     height:0;
+// }
+.video-responsive iframe{
+    left:0;
+    top:0;
+    height:100%;
+    width:100%;
+    position:absolute;
+    background-color: black;
+}
 .hero-image {
     z-index: 3;
     position: relative;
     width: 100%;
-    height: 100%;
+    height: 100%; // 0
+    overflow: hidden;
+    //padding-bottom: 56.25%;
     //background: url('https://c1.staticflickr.com/1/632/21136101110_1dde1c1a7e_o.jpg') no-repeat center center fixed;
     background-size: cover;
     box-shadow: 0 5px 60px 10px rgba(black, .75);

@@ -3,24 +3,18 @@
 // ==========================================================================
 
 const User = require('../models/User');
-const bcrypt = require('bcrypt-nodejs');
 
 // connect to mongo db
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/download-shop', { useMongoClient: true });
 
-// encrypt password
-function encryptPass(password) {
-    return bcrypt.hashSync(password, bcrypt.genSaltSync(5), null);
-}
-
 // data to add to mongo db
 const users = [
     new User({
-        email: 'user@test.com',
-        password: encryptPass('password')
+        email: 'user@test.com'
     })
 ];
+users[0].password = users.encryptPassword('password');
 
 // clear data collection
 mongoose.connection.dropCollection('users', (err, result) => {

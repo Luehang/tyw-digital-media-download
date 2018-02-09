@@ -16,6 +16,7 @@ User.findOne({email: 'user@test.com'}, async (err, user) => {
         new Product({
             _user: user._id,
             title: 'The Italian Dolomites',
+            video_url: "https://player.vimeo.com/video/12142407?autoplay=1&background=1&loop=1&quality=1080p",
             image_path: "https://c1.staticflickr.com/1/632/21136101110_1dde1c1a7e_o.jpg",
             download_path: "https://c1.staticflickr.com/1/632/21136101110_1dde1c1a7e_o.jpg",
             description: 'Interview with Andy Free about his trip to the dolomites in Italy',
@@ -46,6 +47,7 @@ User.findOne({email: 'user@test.com'}, async (err, user) => {
         new Product({
             _user: user._id,
             title: 'The Magic Pond',
+            video_url: "https://www.youtube.com/embed/QohH89Eu5iM?autoplay=1&showinfo=0&mute=1&controls=0&disablekb=1&iv_load_policy=1&modestbranding=0&loop=1&playlist=QohH89Eu5iM",
             image_path: "https://i.redd.it/cz572ctve9ux.jpg",
             download_path: "https://i.redd.it/cz572ctve9ux.jpg",
             description: 'The scenery is set like a Monet painting',
