@@ -22,6 +22,7 @@ User.findOne({email: 'user@test.com'}, async (err, user) => {
             description: 'Interview with Andy Free about his trip to the dolomites in Italy',
             price: 15.70,
             rating: 5,
+            percent_rating: 100,
             order: 2
         }),
         new Product({
@@ -32,6 +33,7 @@ User.findOne({email: 'user@test.com'}, async (err, user) => {
             description: 'Everything you should know about hiking in the mountains',
             price: 23.78,
             rating: 4,
+            percent_rating: 80,
             order: 3
         }),
         new Product({
@@ -42,6 +44,7 @@ User.findOne({email: 'user@test.com'}, async (err, user) => {
             description: 'Walking among the nature in the Rocky Mountain National Park, Colorado',
             price: 11.47,
             rating: 3.4,
+            percent_rating: 68,
             order: 4
         }),
         new Product({
@@ -53,6 +56,7 @@ User.findOne({email: 'user@test.com'}, async (err, user) => {
             description: 'The scenery is set like a Monet painting',
             price: 11.47,
             rating: 3.6,
+            percent_rating: 72,
             order: 1
         }),
         new Product({
@@ -63,6 +67,7 @@ User.findOne({email: 'user@test.com'}, async (err, user) => {
             description: 'What should you bring to the beach, and what beaches should you visit?',
             price: 23.78,
             rating: 4.6,
+            percent_rating: 92,
             order: 5
         }),
         new Product({
@@ -73,6 +78,7 @@ User.findOne({email: 'user@test.com'}, async (err, user) => {
             description: 'We went to Norway to find out just how romantic it can be sleeping under the stars',
             price: 11.47,
             rating: 3.7,
+            percent_rating: 74,
             order: 6
         }),
         new Product({
@@ -83,6 +89,7 @@ User.findOne({email: 'user@test.com'}, async (err, user) => {
             description: 'In USA there\'s over a thousand caves. We list everyone that you should visit.',
             price: 11.47,
             rating: 2.7,
+            percent_rating: 54,
             order: 7
         })
     ];

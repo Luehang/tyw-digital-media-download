@@ -63,7 +63,7 @@ router.route('/update-profile')
  */
 router.route('/products')
     .get(isLoggedIn, 
-        productController.getQueryProduct('user/products', 'User Products', 10, 15, 'user')
+        productController.getQueryProduct('user/products', 'Inventory', 10, 15, 'user')
     );
 
 /**

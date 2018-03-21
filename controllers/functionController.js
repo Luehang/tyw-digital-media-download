@@ -7,7 +7,7 @@ const functionController = {};
  *
  */
 functionController.nearestHundredths = (number) => {
-  return decimalAdjust('round', number, -2);
+    return decimalAdjust('round', number, -2);
 };
 
 function decimalAdjust(type, value, exp) {

@@ -1,8 +1,107 @@
-<style>
-    
-</style>
+<div class="home-screen"></div>
+    <div class="rela-block top-section">
+        <div class="abs-center top-text">
+            <h2>TYW Digital Media</h2>
+            <p style="color:#fff">Where Talent Meets your Production.</p>
+            <a href="{{APP_URL}}" style="text-decoration:none;color:#1abc9c;">
+                <div class="rela-inline rect-button top-button"><p>Learn More<br>TYW</p></div>
+            </a>
+        </div>
+        <div class="bottom-arrow"></div>
+    </div>
+</div>
 
-<div class='main-wrapper'>
+<div class="primary-container clearfix">
+    <div class="main-wrapper">
+        {{#if mainProduct }}
+        {{#each mainProduct }}
+        <div class="block">
+            <div class="front-product main-visual">
+                {{#if this.video_url }}
+                    <iframe class="video-player" src="{{this.video_url}}" frameborder="0" allow="autoplay; encrypted-media" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                {{else }}
+                    <img src="{{this.image_path}}"/>
+                {{/if }}
+                <div class="buttons">
+                    <a class="buy" href="/products/{{this._id}}">More Info.</a>
+                </div>
+            </div>
+            
+            <div class="info main-info" style="display:flex;flex-direction:column;">
+                <a href="/products/{{this._id}}" style="text-decoration:none;"><h4>{{this.title}}</h4></a>
+                <span class="description">{{this.description}}</span>
+                <div>
+                    <span class="full-price price">${{this.price}}</span>
+                    <a class="button" style="width: 120px;margin: 0;float: right;" href="/checkout/{{this._id}}">Buy Now</a>
+                </div>
+            </div>
+            
+            <div class="details">
+                <span class="time">{{this.created_at}}</span>
+                <a href="/products/{{this._id}}">
+                    <div class="star-ratings-sprite" style="float: right;">
+                        <span style="width: {{this.percent_rating}}%" class="star-ratings-sprite-rating"></span>
+                    </div>
+                </a>
+            </div>
+        </div>
+        {{/each }}
+        {{/if }}
+
+        <div class="sort-row">
+            {{#each products }}
+            <div class="sort block">
+                <div class="front-product">
+                    <img src="{{this.image_path}}"/>
+                    <div class="buttons">
+                        <a class="buy" href="/products/{{this._id}}">More Info.</a>
+                    </div>
+                </div>
+                
+                <div class="info">
+                    <a href="/products/{{this._id}}" style="text-decoration:none;"><h4>{{this.title}}</h4></a>
+                    <span class="description">{{this.description}}</span>
+                    <div>
+                        <span class="full-price price">${{this.price}}</span>
+                        <a class="button" style="width: 120px;margin: 0;float: right;" href="/checkout/{{this._id}}">Buy Now</a>
+                    </div>
+                </div>
+                
+                <div class="details">
+                    <span class="time">{{this.created_at}}</span>
+                    <a href="/products/{{this._id}}">
+                        <div class="star-ratings-sprite" style="float: right;">
+                            <span style="width: {{this.percent_rating}}%" class="star-ratings-sprite-rating"></span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            {{/each }}
+        </div>
+    </div>
+</div>
+
+<script>
+    $(window).scroll(function(){
+        var top_height = $('.top-section').innerHeight(),
+            scroll_pos = $(window).scrollTop(),
+            difference = top_height + scroll_pos,
+            new_top = difference/2,
+            opacity_mod = (scroll_pos / top_height) * 0.4, // Decimal controls rate of opacity change
+            opacity_val = (top_height - scroll_pos)/top_height - opacity_mod;
+        
+        if(scroll_pos <= top_height ) {
+            $('.top-text').css('top', new_top);
+            $('.top-text').css('opacity', opacity_val);
+            $('.bottom-arrow').css('opacity', opacity_val*1.2);
+        }
+        
+        (scroll_pos >= (top_height - 100)) ? ( $('.nav-bar').addClass('scrolled') ) : ( $('.nav-bar').removeClass('scrolled') );
+        
+    });
+</script>
+
+{{!-- <div class='main-wrapper'>
   
     {{#each mainProduct }}
     <div class='hero-image video-responsive'>
@@ -55,46 +154,42 @@
   
     <div class='scroll-content'>
         {{#each products }}
-            {{!-- <div class='sc-row'>
-                {{#each this }} --}}
-                    <div class='content-article'>
-                        <div class='article-number'>0{{this.count}}</div>
-                        <div class='article-info'>
-                            <div class='ai-label'>{{this.title}}</div>
-                            <div class='ai-desc'>{{this.description}}</div>
-                            <div class='ai-footer'>
-                                <div class='aif-comments'><a href="/products/{{this._id}}"><img src="/img/download-interface-symbol.svg" alt="..." height="12.5px" width="12.5px" /> Download</a></div>
-                                <div class='aif-divider'></div>
-                                <div class='aif-shares'>
-                                    <form class="rating" style="width: 138px;">
-                                        <input {{#five}}checked{{/five}} type="radio" id="star5" name="rating" value="5" disabled />
-                                            <label class = "full" for="star5"></label>
-                                        <input {{#fourhalf}}checked{{/fourhalf}} type="radio" id="star4.5" name="rating" value="4.5" disabled />
-                                            <label class = "half" for="star4.5"></label>
-                                        <input {{#four}}checked{{/four}} type="radio" id="star4" name="rating" value="4" disabled />
-                                            <label class = "full" for="star4"></label>
-                                        <input {{#threehalf}}checked{{/threehalf}} type="radio" id="star3.5" name="rating" value="3.5" disabled />
-                                            <label class = "half" for="star3.5"></label>
-                                        <input {{#three}}checked{{/three}} type="radio" id="star3" name="rating" value="3" disabled />
-                                            <label class = "full" for="star3"></label>
-                                        <input {{#twohalf}}checked{{/twohalf}} type="radio" id="star2.5" name="rating" value="2.5" disabled />
-                                            <label class = "half" for="star2.5"></label>
-                                        <input {{#two}}checked{{/two}} type="radio" id="star2" name="rating" value="2" disabled />
-                                            <label class = "full" for="star2"></label>
-                                        <input {{#onehalf}}checked{{/onehalf}} type="radio" id="star1.5" name="rating" value="1.5" disabled />
-                                            <label class = "half" for="star1.5"></label>
-                                        <input {{#one}}checked{{/one}} type="radio" id="star1" name="rating" value="1" disabled />
-                                            <label class = "full" for="star1"></label>
-                                        <input {{#half}}checked{{/half}} type="radio" id="star.5" name="rating" value=".5" disabled />
-                                            <label class = "half" for="star.5"></label>
-                                    </form>
-                                </div>
-                            </div>
+            <div class='content-article'>
+                <div class='article-number'>0{{this.count}}</div>
+                <div class='article-info'>
+                    <div class='ai-label'>{{this.title}}</div>
+                    <div class='ai-desc'>{{this.description}}</div>
+                    <div class='ai-footer'>
+                        <div class='aif-comments'><a href="/products/{{this._id}}"><img src="/img/download-interface-symbol.svg" alt="..." height="12.5px" width="12.5px" /> Download</a></div>
+                        <div class='aif-divider'></div>
+                        <div class='aif-shares'>
+                            <form class="rating" style="width: 138px;">
+                                <input {{#five}}checked{{/five}} type="radio" id="star5" name="rating" value="5" disabled />
+                                    <label class = "full" for="star5"></label>
+                                <input {{#fourhalf}}checked{{/fourhalf}} type="radio" id="star4.5" name="rating" value="4.5" disabled />
+                                    <label class = "half" for="star4.5"></label>
+                                <input {{#four}}checked{{/four}} type="radio" id="star4" name="rating" value="4" disabled />
+                                    <label class = "full" for="star4"></label>
+                                <input {{#threehalf}}checked{{/threehalf}} type="radio" id="star3.5" name="rating" value="3.5" disabled />
+                                    <label class = "half" for="star3.5"></label>
+                                <input {{#three}}checked{{/three}} type="radio" id="star3" name="rating" value="3" disabled />
+                                    <label class = "full" for="star3"></label>
+                                <input {{#twohalf}}checked{{/twohalf}} type="radio" id="star2.5" name="rating" value="2.5" disabled />
+                                    <label class = "half" for="star2.5"></label>
+                                <input {{#two}}checked{{/two}} type="radio" id="star2" name="rating" value="2" disabled />
+                                    <label class = "full" for="star2"></label>
+                                <input {{#onehalf}}checked{{/onehalf}} type="radio" id="star1.5" name="rating" value="1.5" disabled />
+                                    <label class = "half" for="star1.5"></label>
+                                <input {{#one}}checked{{/one}} type="radio" id="star1" name="rating" value="1" disabled />
+                                    <label class = "full" for="star1"></label>
+                                <input {{#half}}checked{{/half}} type="radio" id="star.5" name="rating" value=".5" disabled />
+                                    <label class = "half" for="star.5"></label>
+                            </form>
                         </div>
-                        <image class="secondary-image" src="{{this.image_path}}"/>
                     </div>
-                {{!-- {{/each }}
-            </div> --}}
+                </div>
+                <image class="secondary-image" src="{{this.image_path}}"/>
+            </div>
         {{/each }}
     </div>
 </div>
@@ -103,5 +198,5 @@
     $('.hcft-icon').click(function() {
         $('.hero-image').toggleClass('browsing-content');
     });
-</script>
+</script> --}}
 

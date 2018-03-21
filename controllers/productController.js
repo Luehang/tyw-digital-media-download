@@ -32,6 +32,7 @@ productController.getIndividualProduct = async (req, res, next) => {
     const downloadID = req.query.download;
     let ratingTotal = null;
     let ratingAverage = null;
+    let ratingPercentAverage = null;
     let isDownload = null;
     // find product and product review data with count
     const [product, reviews, reviewCount, orderDownload] = await Promise.all([
@@ -50,12 +51,15 @@ productController.getIndividualProduct = async (req, res, next) => {
             ratingTotal += review.rating;
         });
         ratingAverage = nearestHundredths(ratingTotal / reviewCount);
+        ratingPercentAverage = nearestHundredths(ratingAverage * 20);
     }
 
     try {
         // store any messages in variables if any
         const messages = req.flash('error');
         const successMsg = req.flash('success');
+        // store previous url
+        const backUrl = req.session.prev_url;
         // Product.findByIdAndUpdate(productID, { $set: {
         //     rating: null
         // }}, {new: true}, (err, result) => {
@@ -63,15 +67,18 @@ productController.getIndividualProduct = async (req, res, next) => {
         //     console.log(result);
         // });
         Product.findByIdAndUpdate(productID, { $set: {
-            rating: ratingAverage
+            rating: ratingAverage,
+            percent_rating: ratingPercentAverage
         }}, {new: true}, (err, result) => {
             if (err) console.log(err);
             return res.status(200).render('shop/product', {
                 title: `${process.env.APP_NAME}: ${product.title}`,
                 product: product,
                 searchVal: searchVal,
+                backUrl: backUrl,
                 rating: result.rating,
                 ratingAvg: ratingAverage,
+                percent_rating: ratingPercentAverage,
                 reviewCount: reviewCount,
                 isDownload: isDownload,
                 downloadID: downloadID,

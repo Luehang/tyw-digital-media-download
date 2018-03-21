@@ -12,9 +12,10 @@ const gulp                  = require('gulp'),
        del                  = require('del');
 
 const jsMain = [
+    'src/js/base/function.js',
     'src/js/partials/nav.js',
     'src/js/partials/annotation.js',
-    'src/js/base/price-conversion.js',
+    'src/js/components/format-conversions.js',
     'src/js/user/add-product.js',
     'src/js/user/delete-product.js'];
 

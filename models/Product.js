@@ -14,6 +14,7 @@ const productSchema = new Schema({
     sold: {type: Number, default: 0},
     download: {type: Number, default: 0},
     rating: {type: Number, default: null},
+    percent_rating: {type: Number, default: null},
     order: {type: Number, required: true},
     category: {type: String, default: null},
     main: {type: Boolean, default: false},

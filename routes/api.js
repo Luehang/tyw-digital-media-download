@@ -6,6 +6,8 @@ const Review                = require('../models/Review');
 
 // controllers
 const endPointController    = require('../controllers/endPointController');
+const functionController    = require('../controllers/functionController');
+const nearestHundredths     = functionController.nearestHundredths;
 
 /**
  * GET /api/review-message/:id
@@ -14,7 +16,7 @@ const endPointController    = require('../controllers/endPointController');
  * Review Message API endpoint.
  */
 router.route('/review-message/:id')
-    .get(async (req, res) => {
+    .get(async (req, res, next) => {
         const productID = req.params.id;
         try {
             // find product review and count
@@ -41,9 +43,10 @@ router.route('/review-message/:id')
             next(err);
         }
     })
-    .post((req, res) => {
+    .post(async (req, res, next) => {
         const productID = req.params.id;
-        const { userId, name, rating, message } = req.body;
+        const { userId, name, message } = req.body;
+        const rating = Number.parseInt(req.body.rating);
         // if user login
         if (req.isAuthenticated()) {
             userId = req.user._id;
@@ -52,16 +55,23 @@ router.route('/review-message/:id')
             _product: productID,
             userId,
             name,
-            rating: Number.parseInt(rating),
+            rating,
+            percent_rating: nearestHundredths(rating * 20),
             message
         });
-        // send review and send status
-        review.save((err, review) => {
-            if (err) {
-                res.status(500);
-            }
-            res.status(201);
-        });
+        try {
+            // send review and send status
+            review.save((err) => {
+                if (err) {
+                    console.log(err);
+                    res.status(500);
+                }
+                res.status(201);
+            });
+        } catch(err) {
+            res.status(500);
+            next(err);
+        }
     })
 
 module.exports = router;

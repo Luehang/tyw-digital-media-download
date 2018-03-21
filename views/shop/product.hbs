@@ -1,7 +1,7 @@
 <div class="primary-container">
     <div class="product clearfix">
         <div class="header">
-            <a href="/"><div class="back"></div></a>
+            <a href="{{ backUrl }}"><div class="back"></div></a>
         </div>
         <div class="main clearfix">
             <div class="left">
@@ -15,17 +15,18 @@
             </div>
             <div class="right">
                 <p>{{ product.description }}</p>
-                <p>In stock.</p>
+                <p style="font-weight: bold;color: #232e3a;">In stock.</p>
                 <input id="product-id" type="hidden" value="{{ product._id }}"/>
-                <input id="product-rating" type="hidden" value="{{ rating }}" />
-                <div id="product-rating-div"></div>
+                <div class="star-ratings-sprite" style="display:inline-block;">
+                    <span style="width:{{percent_rating}}%;" class="star-ratings-sprite-rating"></span>
+                </div>
+                {{!-- <input id="product-rating" type="hidden" value="{{ rating }}" />
+                <div id="product-rating-div"></div> --}}
                 {{#if reviewCount }}
-                    <p>({{ ratingAvg }})</p>
+                    <p style="display:inline-block;">({{ ratingAvg }})</p>
                 {{/if }}
-                <br />
-                <br />
                 {{#if reviewCount }}
-                    <a href="#customer-reviews" style="text-decoration: underline; font-size: 12px;">
+                    <a href="#customer-reviews" style="text-decoration:underline;font-size:12px;display:block;">
                         {{ reviewCount }} customer reviews &#9662
                     </a>
                 {{/if }}

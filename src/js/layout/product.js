@@ -3,8 +3,6 @@ var guestusername = '';
 var $productID = $('#product-id').val();
 var url = `/api/review-message/${$productID}`;
 var allComments = [];
-var $productRatingDiv = $('#product-rating-div');
-var $productRating = $('#product-rating').val();
 
 function starRating(rating) {
     const rates = [5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1, .5];
@@ -127,10 +125,6 @@ function stopLoader() {
     });
 }
 
-// convert product rating and place into html
-var productRatingHTML = getRateHTML($productRating);
-$productRatingDiv.html(productRatingHTML);
-
 // send request for product data
 $.ajax({
     type: "GET",
@@ -149,7 +143,9 @@ $.ajax({
             $(`<img class="avatar" alt="avatar" src="${defaultAvatar}"/>`).appendTo(comment);
             var contents = $('<div class="body"></div>');
             $(`<a target="_blank">${this.name}</a>`).appendTo(contents);
-            $(`<span> • ${returnDateTime(this.created_at)}</span><br />${getStarRating(this.rating)}<br />`).appendTo(contents);
+            $(`<span> • ${returnDateTime(this.created_at)}</span><br /><div class="star-ratings-sprite">
+            <span style="width: ${this.percent_rating}%" class="star-ratings-sprite-rating"></span>
+        </div><br />`).appendTo(contents);
             $(`<p>${this.message}</p>`).appendTo(contents);
             
             contents.appendTo(comment);
@@ -235,7 +231,7 @@ $(function() {
             }); // end ajax POST request
             // convert date to normal date
             var tempDate = returnDateTime((new Date).toISOString());
-            var tempRate = getStarRating(starRating);
+            var tempRate = starRating * 20;
             $('.your-msg').val("");
             
             $('.your-name').fadeOut().remove();
@@ -243,7 +239,8 @@ $(function() {
             
             $(`<img class="avatar" alt="avatar" src="${defaultAvatar}" />`).appendTo(comment);
             $(`<a target="_blank">${name}</a>`).appendTo(contents);
-            $(`<span> • ${tempDate}</span><br />${tempRate}<br />`).appendTo(contents);
+            $(`<span> • ${tempDate}</span><br />` + 
+            `<div class="star-ratings-sprite"><span style="width: ${tempRate}%" class="star-ratings-sprite-rating"></span></div><br />`).appendTo(contents);
             $(`<p>${msg}</p>`).appendTo(contents);
             // place to html
             contents.appendTo(comment);
