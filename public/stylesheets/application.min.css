@@ -2205,6 +2205,11 @@ button:disabled {
   .sort-row .sort {
     flex: 2 98%; } }
 
+@media screen and (max-width: 963px) {
+  .home-screen h2 {
+    font-size: 58px;
+    line-height: 64px; } }
+
 .thumbnail {
   padding: 15px;
   border: 1px solid #b3d8b7;

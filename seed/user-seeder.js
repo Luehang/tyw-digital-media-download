@@ -11,10 +11,10 @@ mongoose.connect('mongodb://localhost/download-shop', { useMongoClient: true });
 // data to add to mongo db
 const users = [
     new User({
-        email: 'user@test.com'
+        email: 'lue_hang@hotmail.com'
     })
 ];
-users[0].password = users.encryptPassword('password');
+users[0].password = User.encryptPassword('password');
 
 // clear data collection
 mongoose.connection.dropCollection('users', (err, result) => {

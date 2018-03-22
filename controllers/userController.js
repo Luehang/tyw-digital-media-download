@@ -148,10 +148,13 @@ userController.getProfilePage = (req, res) => {
 userController.getSignInPage = (req, res) => {
     // store flash messages in variable
     const messages = req.flash('error');
+    const successMsg = req.flash('success');
     // render sign in view page
     res.render('user/signin', {
         title: 'Sign In',
         csrfToken: req.csrfToken(), 
+        successMsg: successMsg,
+        hasSuccess: successMsg.length > 0,
         messages: messages, 
         hasErrors: messages.length > 0
     });

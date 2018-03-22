@@ -8,11 +8,12 @@ const userSchema = new Schema({
     password: {type: String, required: true},
     business_type: {type: String, default: 'individual', enum: ['individual', 'company']},
     company_name: {type: String, default: null},
+    password_reset_token: {type: String, default: null},
     created_at: {type: Date, default: Date.now},
     is_deleted: {type: Boolean, default: false}
 });
 
-userSchema.methods.encryptPassword = function(password) {
+userSchema.statics.encryptPassword = function(password) {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(5), null);
 }
 

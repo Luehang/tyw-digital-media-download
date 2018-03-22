@@ -10,7 +10,7 @@ const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/download-shop', { useMongoClient: true });
 
 // data to add to mongo db
-User.findOne({email: 'user@test.com'}, async (err, user) => {
+User.findOne({email: 'lue_hang@hotmail.com'}, async (err, user) => {
     if (err) console.error(err);
     const products = [
         new Product({

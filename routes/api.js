@@ -74,4 +74,12 @@ router.route('/review-message/:id')
         }
     })
 
+/**
+ * GET /api/reset-password
+ * POST /api/reset-password
+ *
+ * Review Message API endpoint.
+ */
+router.route('/reset-password')
+
 module.exports = router;
